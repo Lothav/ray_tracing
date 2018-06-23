@@ -6,7 +6,8 @@
 #include <fstream>
 #include <vector>
 #include <regex>
-#include "Camera.hpp"
+#include "RayTracing/Camera.hpp"
+#include "RayTracing/Light.hpp"
 
 std::vector<std::string> readStream(std::istream& input_stream)
 {
@@ -26,7 +27,7 @@ std::vector<float> getIntsFromString(std::string data_string)
 {
     std::vector<float> data_int = {};
 
-    std::regex r("(\\+|-)?[[:digit:]]+");
+    std::regex r("[+-]?([0-9]*[.])?[0-9]+");
     std::smatch m;
 
     while (std::regex_search(data_string, m, r)) {
@@ -64,8 +65,26 @@ int main(int argc, char* argv[])
     auto camera_eye     = stdVectorToGlmVector(getIntsFromString(file_scene[0]));
     auto camera_center  = stdVectorToGlmVector(getIntsFromString(file_scene[1]));
     auto camera_up      = stdVectorToGlmVector(getIntsFromString(file_scene[2]));
+    auto camera_fov     = getIntsFromString(file_scene[3])[0];
 
-    auto camera = new Camera(camera_eye, camera_center, camera_up);
+    auto camera = new RayTracing::Camera(camera_eye, camera_center, camera_up, camera_fov);
+
+    std::vector<RayTracing::Light *> lights;
+
+    auto count_lights = getIntsFromString(file_scene[4])[0];
+
+    for (int i = 0; i < count_lights; ++i) {
+
+        auto light_data = getIntsFromString(file_scene[5+i]);
+
+        auto light_pos        = stdVectorToGlmVector({light_data[0], light_data[1], light_data[2]});
+        auto light_color      = stdVectorToGlmVector({light_data[3], light_data[4], light_data[5]});
+        auto light_mitigation = stdVectorToGlmVector({light_data[6], light_data[7], light_data[8]});
+
+        lights.push_back(new RayTracing::Light(light_pos, light_color, light_mitigation));
+    }
+
+
 
     return EXIT_SUCCESS;
 }
