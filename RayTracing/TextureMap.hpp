@@ -12,7 +12,7 @@
 
 namespace RayTracing
 {
-    class TextureMap : protected Pigment
+    class TextureMap : public Pigment
     {
 
     private:

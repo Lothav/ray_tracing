@@ -11,7 +11,7 @@
 
 namespace RayTracing
 {
-    class Solid : protected Pigment
+    class Solid : public Pigment
     {
 
     private:

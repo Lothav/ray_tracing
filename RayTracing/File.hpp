@@ -21,23 +21,30 @@
 #include "Checker.hpp"
 #include "TextureMap.hpp"
 #include "Finishing.hpp"
+#include "../Object/Sphere.hpp"
+#include "../Object/Polyhedron.hpp"
 
 namespace RayTracing
 {
     class File
     {
 
+    private:
+
+        std::vector<std::string> file_scene;
+
     public:
 
-        File() = delete;
-
-        static void LoadDataFromFile(const std::string& file_path)
+        explicit File(const std::string& file_path)
         {
             std::fstream fs;
             fs.open(file_path, std::fstream::in);
-            auto file_scene = Util::ReadStream(fs);
+            this->file_scene = Util::ReadStream(fs);
             fs.close();
+        }
 
+        void loadData() const
+        {
             auto camera_eye     = Util::StdVecToGlmVec3(Util::GetFloats(file_scene[0]));
             auto camera_center  = Util::StdVecToGlmVec3(Util::GetFloats(file_scene[1]));
             auto camera_up      = Util::StdVecToGlmVec3(Util::GetFloats(file_scene[2]));
@@ -121,6 +128,52 @@ namespace RayTracing
 
                 finishes.push_back(new Finishing(light_coefficients, model_coefficients));
             }
+
+
+            std::vector<Object::Object *> objects = {};
+
+            auto objects_index = finishing_index + total_finishes;
+            auto total_objects = Util::GetFloats(file_scene[objects_index])[0];
+            objects_index++;
+
+            for (int l = 0; l < total_objects; ++l) {
+
+                auto objects_data_indexes  = Util::GetFloats(file_scene[objects_index+l]);
+                auto pigment_tokenize_data = Util::TokenizeString(file_scene[objects_index+l], ' ');
+
+                auto type           = pigment_tokenize_data[2];
+                auto pigment_index  = objects_data_indexes[0];
+                auto finish_index   = objects_data_indexes[1];
+
+                if (type == "sphere") {
+
+                    objects.push_back(
+                        new Object::Sphere(
+                            static_cast<int>(pigment_index),
+                            static_cast<int>(finish_index),
+                            {objects_data_indexes[2], objects_data_indexes[3], objects_data_indexes[4]},
+                            objects_data_indexes[5]
+                        )
+                    );
+
+                    continue;
+                }
+
+                if (type == "polyhedron") {
+
+                    auto polyhedron = new Object::Polyhedron(static_cast<int>(pigment_index), static_cast<int>(finish_index));
+
+                    for (int i = 0; i < objects_data_indexes[2]; ++i) {
+                        objects_index++;
+                        auto plane = Util::StdVecToGlmVec4(Util::GetFloats(file_scene[objects_index+l]));
+                        polyhedron->addPlane(plane);
+                    }
+
+                    objects.push_back(polyhedron);
+                    continue;
+                }
+            }
+
         }
     };
 }

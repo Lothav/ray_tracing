@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 project(ray_tracing)
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 add_executable(
         ray_tracing
         main.cpp
@@ -22,4 +22,4 @@ add_executable(
         RayTracing/Util.hpp
         RayTracing/File.cpp
         RayTracing/File.hpp
-)
+        Object/Object.cpp Object/Object.hpp Object/Sphere.cpp Object/Sphere.hpp Object/Polyhedron.cpp Object/Polyhedron.hpp)
