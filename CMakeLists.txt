@@ -8,4 +8,7 @@ add_executable(
         RayTracing/Camera.cpp
         RayTracing/Light.hpp
         RayTracing/Light.cpp
-)
+        RayTracing/Pigments.hpp
+        RayTracing/Pigments.cpp
+        RayTracing/Solid.cpp
+        RayTracing/Solid.hpp RayTracing/Checker.cpp RayTracing/Checker.hpp RayTracing/TextureMap.cpp RayTracing/TextureMap.hpp)
