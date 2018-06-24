@@ -4,22 +4,22 @@ set(CMAKE_CXX_STANDARD 17)
 add_executable(
         ray_tracing
         main.cpp
-        RayTracing/Camera.hpp
-        RayTracing/Camera.cpp
-        RayTracing/Light.hpp
-        RayTracing/Light.cpp
-        RayTracing/Pigment.hpp
-        RayTracing/Pigment.cpp
-        RayTracing/Solid.cpp
-        RayTracing/Solid.hpp
-        RayTracing/Checker.cpp
-        RayTracing/Checker.hpp
-        RayTracing/TextureMap.cpp
-        RayTracing/TextureMap.hpp
-        RayTracing/Finishing.cpp
-        RayTracing/Finishing.hpp
-        RayTracing/Util.cpp
-        RayTracing/Util.hpp
-        RayTracing/File.cpp
-        RayTracing/File.hpp
+        Camera/Camera.hpp
+        Camera/Camera.cpp
+        Light/Light.hpp
+        Light/Light.cpp
+        Pigment/Pigment.hpp
+        Pigment/Pigment.cpp
+        Pigment/Solid.cpp
+        Pigment/Solid.hpp
+        Pigment/Checker.cpp
+        Pigment/Checker.hpp
+        Pigment/TextureMap.cpp
+        Pigment/TextureMap.hpp
+        Finishing/Finishing.cpp
+        Finishing/Finishing.hpp
+        Util/Util.cpp
+        Util/Util.hpp
+        Util/File.cpp
+        Util/File.hpp
         Object/Object.cpp Object/Object.hpp Object/Sphere.cpp Object/Sphere.hpp Object/Polyhedron.cpp Object/Polyhedron.hpp)

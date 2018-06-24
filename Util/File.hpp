@@ -15,12 +15,12 @@
 #include <vector>
 #include <regex>
 #include "Util.hpp"
-#include "Camera.hpp"
-#include "Light.hpp"
-#include "Solid.hpp"
-#include "Checker.hpp"
-#include "TextureMap.hpp"
-#include "Finishing.hpp"
+#include "../Camera/Camera.hpp"
+#include "../Light/Light.hpp"
+#include "../Pigment/Solid.hpp"
+#include "../Pigment/Checker.hpp"
+#include "../Pigment/TextureMap.hpp"
+#include "../Finishing/Finishing.hpp"
 #include "../Object/Sphere.hpp"
 #include "../Object/Polyhedron.hpp"
 

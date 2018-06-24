@@ -4,7 +4,7 @@
 
 #include <iostream>
 #include <memory>
-#include "RayTracing/File.hpp"
+#include "Util/File.hpp"
 
 int main(int argc, char* argv[])
 {
