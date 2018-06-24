@@ -11,4 +11,4 @@ add_executable(
         RayTracing/Pigments.hpp
         RayTracing/Pigments.cpp
         RayTracing/Solid.cpp
-        RayTracing/Solid.hpp RayTracing/Checker.cpp RayTracing/Checker.hpp RayTracing/TextureMap.cpp RayTracing/TextureMap.hpp)
+        RayTracing/Solid.hpp RayTracing/Checker.cpp RayTracing/Checker.hpp RayTracing/TextureMap.cpp RayTracing/TextureMap.hpp RayTracing/Finishing.cpp RayTracing/Finishing.hpp RayTracing/Util.cpp RayTracing/Util.hpp RayTracing/File.cpp RayTracing/File.hpp)
