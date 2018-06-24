@@ -5,13 +5,13 @@
 #ifndef RAY_TRACING_SOLID_HPP
 #define RAY_TRACING_SOLID_HPP
 
-#include "Pigments.hpp"
+#include "Pigment.hpp"
 
 #include <glm/vec3.hpp>
 
 namespace RayTracing
 {
-    class Solid : protected Pigments
+    class Solid : protected Pigment
     {
 
     private:

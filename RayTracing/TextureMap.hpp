@@ -5,14 +5,14 @@
 #ifndef RAY_TRACING_TEXTUREMAP_HPP
 #define RAY_TRACING_TEXTUREMAP_HPP
 
-#include "Pigments.hpp"
+#include "Pigment.hpp"
 #include <string>
 #include <glm/vec4.hpp>
 #include <utility>
 
 namespace RayTracing
 {
-    class TextureMap : protected Pigments
+    class TextureMap : protected Pigment
     {
 
     private:

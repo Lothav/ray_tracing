@@ -6,11 +6,11 @@
 #define RAY_TRACING_CHECKER_HPP
 
 #include <glm/vec3.hpp>
-#include "Pigments.hpp"
+#include "Pigment.hpp"
 
 namespace RayTracing
 {
-    class Checker : public Pigments
+    class Checker : public Pigment
     {
 
     private:

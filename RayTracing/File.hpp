@@ -20,6 +20,7 @@
 #include "Solid.hpp"
 #include "Checker.hpp"
 #include "TextureMap.hpp"
+#include "Finishing.hpp"
 
 namespace RayTracing
 {
@@ -44,7 +45,7 @@ namespace RayTracing
 
             auto camera = new RayTracing::Camera(camera_eye, camera_center, camera_up, camera_fov);
 
-            std::vector<RayTracing::Light *> lights;
+            std::vector<RayTracing::Light *> lights = {};
 
             auto count_lights = Util::GetFloats(file_scene[4])[0];
 
@@ -59,6 +60,8 @@ namespace RayTracing
                 lights.push_back(new RayTracing::Light(light_pos, light_color, light_mitigation));
             }
 
+            std::vector<RayTracing::Pigment *> pigments = {};
+
             auto pigments_index = 5+count_lights;
             auto total_pigments = Util::GetFloats(file_scene[pigments_index])[0];
             pigments_index++;
@@ -71,19 +74,19 @@ namespace RayTracing
 
                 if (type == "solid") {
                     auto solid_data = Util::StdVecToGlmVec3(Util::GetFloats(file_scene[pigments_index+j]));
-                    auto pigment = new RayTracing::Solid(solid_data);
+                    pigments.push_back(new RayTracing::Solid(solid_data));
 
                     continue;
                 }
 
                 if (type == "checker") {
 
-                    auto checker_data = Util::GetFloats(file_scene[pigments_index+j])
+                    auto checker_data = Util::GetFloats(file_scene[pigments_index+j]);
 
                     auto color_a = Util::StdVecToGlmVec3({checker_data[0], checker_data[1], checker_data[2]});
                     auto color_b = Util::StdVecToGlmVec3({checker_data[3], checker_data[4], checker_data[5]});
 
-                    auto pigment = new RayTracing::Checker(color_a, color_b, checker_data[6]);
+                    pigments.push_back(new RayTracing::Checker(color_a, color_b, checker_data[6]));
 
                     continue;
                 }
@@ -97,10 +100,26 @@ namespace RayTracing
                     pigments_index++;
                     auto map_vec_2 = Util::StdVecToGlmVec4(Util::GetFloats(file_scene[pigments_index+j]));
 
-                    auto pigment = new RayTracing::TextureMap(texture_path, map_vec_1, map_vec_2);
+                    pigments.push_back(new RayTracing::TextureMap(texture_path, map_vec_1, map_vec_2));
 
                     continue;
                 }
+            }
+
+            std::vector<RayTracing::Finishing*> finishes;
+
+            auto finishing_index = pigments_index + total_pigments;
+            auto total_finishes = Util::GetFloats(file_scene[finishing_index])[0];
+            finishing_index++;
+
+            for (int k = 0; k < total_finishes; ++k) {
+
+                auto coefficients = Util::GetFloats(file_scene[finishing_index+k]);
+
+                auto light_coefficients = Util::StdVecToGlmVec4({coefficients[0], coefficients[1], coefficients[2], coefficients[3]});
+                auto model_coefficients = Util::StdVecToGlmVec3({coefficients[4], coefficients[5], coefficients[6]});
+
+                finishes.push_back(new Finishing(light_coefficients, model_coefficients));
             }
         }
     };
