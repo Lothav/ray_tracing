@@ -8,7 +8,7 @@
 #include <glm/vec3.hpp>
 #include "Object.hpp"
 
-namespace Object
+namespace RayTracing
 {
     class Sphere : public Object
     {

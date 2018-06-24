@@ -5,7 +5,7 @@
 #ifndef RAY_TRACING_OBJECT_HPP
 #define RAY_TRACING_OBJECT_HPP
 
-namespace Object
+namespace RayTracing
 {
     class Object
     {

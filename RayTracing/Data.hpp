@@ -24,7 +24,7 @@ namespace RayTracing
         std::vector<Light *>            lights_;
         std::vector<Pigment *>          pigmentss_;
         std::vector<Finishing *>        finishes_;
-        std::vector<Object::Object *>   objects_;
+        std::vector<Object *>   objects_;
 
     public:
 

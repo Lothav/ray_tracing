@@ -155,9 +155,9 @@ namespace RayTracing
             return finishes;
         }
 
-        std::vector<Object::Object *> loadObjects()
+        std::vector<RayTracing::Object *> loadObjects()
         {
-            std::vector<Object::Object *> objects = {};
+            std::vector<RayTracing::Object *> objects = {};
 
             auto total_objects = Util::GetFloats(file_scene[jump_index])[0];
             jump_index++;
@@ -174,7 +174,7 @@ namespace RayTracing
                 if (type == "sphere") {
 
                     objects.push_back(
-                        new Object::Sphere(
+                        new RayTracing::Sphere(
                             static_cast<int>(pigment_index),
                             static_cast<int>(finish_index),
                             {objects_data_indexes[2], objects_data_indexes[3], objects_data_indexes[4]},
@@ -187,7 +187,7 @@ namespace RayTracing
 
                 if (type == "polyhedron") {
 
-                    auto polyhedron = new Object::Polyhedron(static_cast<int>(pigment_index), static_cast<int>(finish_index));
+                    auto polyhedron = new RayTracing::Polyhedron(static_cast<int>(pigment_index), static_cast<int>(finish_index));
 
                     for (int i = 0; i < objects_data_indexes[2]; ++i) {
                         jump_index++;

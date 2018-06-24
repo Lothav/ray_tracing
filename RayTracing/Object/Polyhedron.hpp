@@ -9,7 +9,7 @@
 #include <vector>
 #include "Object.hpp"
 
-namespace Object
+namespace RayTracing
 {
     class Polyhedron : public Object
     {
