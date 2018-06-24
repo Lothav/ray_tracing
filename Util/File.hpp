@@ -15,14 +15,14 @@
 #include <vector>
 #include <regex>
 #include "Util.hpp"
-#include "../Camera/Camera.hpp"
-#include "../Light/Light.hpp"
-#include "../Pigment/Solid.hpp"
-#include "../Pigment/Checker.hpp"
-#include "../Pigment/TextureMap.hpp"
-#include "../Finishing/Finishing.hpp"
-#include "../Object/Sphere.hpp"
-#include "../Object/Polyhedron.hpp"
+#include "../RayTracing/Camera/Camera.hpp"
+#include "../RayTracing/Light/Light.hpp"
+#include "../RayTracing/Pigment/Solid.hpp"
+#include "../RayTracing/Pigment/Checker.hpp"
+#include "../RayTracing/Pigment/TextureMap.hpp"
+#include "../RayTracing/Finishing/Finishing.hpp"
+#include "../RayTracing/Object/Sphere.hpp"
+#include "../RayTracing/Object/Polyhedron.hpp"
 
 namespace RayTracing
 {
@@ -49,29 +49,17 @@ namespace RayTracing
             fs.close();
         }
 
-        void loadData()
-        {
-            this->loadCamera();
-            this->loadLights();
-            this->loadPigments();
-            this->loadFinishes();
-            this->loadObjects();
-        }
-
-    private:
-
-        void loadCamera()
+        RayTracing::Camera* loadCamera()
         {
             auto camera_eye     = Util::StdVecToGlmVec3(Util::GetFloats(file_scene[0]));
             auto camera_center  = Util::StdVecToGlmVec3(Util::GetFloats(file_scene[1]));
             auto camera_up      = Util::StdVecToGlmVec3(Util::GetFloats(file_scene[2]));
             auto camera_fov     = Util::GetFloats(file_scene[3])[0];
 
-            auto camera = new RayTracing::Camera(camera_eye, camera_center, camera_up, camera_fov);
-
+            return new RayTracing::Camera(camera_eye, camera_center, camera_up, camera_fov);
         }
 
-        void loadLights()
+        std::vector<RayTracing::Light *> loadLights()
         {
             std::vector<RayTracing::Light *> lights = {};
 
@@ -89,9 +77,11 @@ namespace RayTracing
             }
 
             jump_index += total_lights;
+
+            return lights;
         }
 
-        void loadPigments()
+        std::vector<RayTracing::Pigment *> loadPigments()
         {
             std::vector<RayTracing::Pigment *> pigments = {};
 
@@ -140,9 +130,10 @@ namespace RayTracing
 
             jump_index += total_pigments;
 
+            return pigments;
         }
 
-        void loadFinishes()
+        std::vector<RayTracing::Finishing*> loadFinishes()
         {
             std::vector<RayTracing::Finishing*> finishes;
 
@@ -160,9 +151,11 @@ namespace RayTracing
             }
 
             jump_index += total_finishes;
+
+            return finishes;
         }
 
-        void loadObjects()
+        std::vector<Object::Object *> loadObjects()
         {
             std::vector<Object::Object *> objects = {};
 
@@ -206,6 +199,8 @@ namespace RayTracing
                     continue;
                 }
             }
+
+            return objects;
         }
 
     };

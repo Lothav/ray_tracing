@@ -5,6 +5,7 @@
 #include <iostream>
 #include <memory>
 #include "Util/File.hpp"
+#include "RayTracing/Data.hpp"
 
 int main(int argc, char* argv[])
 {
@@ -13,8 +14,8 @@ int main(int argc, char* argv[])
         return EXIT_FAILURE;
     }
 
-    auto file = std::make_unique<RayTracing::File>(argv[1]);
-    file->loadData();
+    auto ray_tracing_data = new RayTracing::Data();
+    ray_tracing_data->loadFromfile(argv[1]);
 
     return EXIT_SUCCESS;
 }
