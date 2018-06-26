@@ -31,4 +31,6 @@ add_executable(
         RayTracing/Data/Object/Polyhedron.cpp
         RayTracing/Data/Object/Polyhedron.hpp
         RayTracing/Data/Data.hpp
-        RayTracing/RayTracing.hpp RayTracing/RayTracing.cpp RayTracing/RayTracing.hpp)
+        RayTracing/RayTracing.hpp
+        RayTracing/RayTracing.cpp
+)

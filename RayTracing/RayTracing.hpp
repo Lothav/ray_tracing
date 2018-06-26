@@ -6,7 +6,17 @@
 #define RAY_TRACING_RAYTRACING_HPP
 
 
+#include "Data/Data.hpp"
+
 class RayTracing {
+
+private:
+
+    Data * data_ = nullptr;
+
+public:
+
+    RayTracing(Data* data) : data_(data) {}
 
 };
 
