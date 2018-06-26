@@ -15,15 +15,15 @@ int main(int argc, char* argv[])
         return EXIT_FAILURE;
     }
 
-    auto* ray_tracing_data = new RayTracing::Data();
-    ray_tracing_data->loadFromfile(argv[1]);
+    auto* data = new RayTracing::Data();
+    data->loadFromfile(argv[1]);
 
-    auto* ray_tracing = new RayTracing::RayTracing(ray_tracing_data);
+    auto* ray_tracing = new RayTracing::RayTracing(data);
     ray_tracing->dispatchRay();
 
     auto file = std::make_unique<RayTracing::File>(argv[2]);
     file->clearFile();
-    file->writeOnFile();
+    file->writePPM(200, 100);
 
     return EXIT_SUCCESS;
 }

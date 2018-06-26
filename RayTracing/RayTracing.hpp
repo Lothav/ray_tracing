@@ -15,7 +15,7 @@ namespace RayTracing
 
     private:
 
-        Data * data_ = nullptr;
+        Data* data_ = nullptr;
 
     public:
 
