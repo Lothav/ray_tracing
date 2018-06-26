@@ -21,6 +21,16 @@ namespace RayTracing
 
         Ray (glm::vec3 origin, glm::vec3 direction) : origin_(origin), direction_(direction) {}
 
+        glm::vec3 getOrigin() const
+        {
+            return origin_;
+        }
+
+        glm::vec3 getDirection() const
+        {
+            return direction_;
+        }
+
     };
 }
 
