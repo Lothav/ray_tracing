@@ -24,6 +24,11 @@ namespace RayTracing
 
         Camera(glm::vec3 eye, glm::vec3 center, glm::vec3 up, float fov) : eye_(eye), center_(center), up_(up), fov_(fov) {}
 
+        glm::vec3 getCenter() const
+        {
+            return center_;
+        }
+
     };
 
 }

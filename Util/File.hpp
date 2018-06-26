@@ -52,11 +52,19 @@ namespace RayTracing
 
             fs << "P3\n" << nx << " " << ny << "\n255\n";
 
+            glm::vec3 lower_left_corner(-2.f, -1.f, -1.f);
+            glm::vec3 horizontal(4.f, 0.f, 0.f);
+            glm::vec3 vertical(0.f, 2.f, 0.f);
+            glm::vec3 origin(0.f, 0.f, 0.f);
+
             for (int j = ny-1; j >= 0; j--) {
                 for (int i = 0; i < nx; i++) {
-                    float r = float(i) / float(nx);
-                    float g = float(j) / float(ny);
-                    float b = .2f;
+                    float u = float(i) / float(nx);
+                    float v = float(j) / float(ny);
+
+                    Ray* ray = new Ray(origin, lower_left_corner + u*horizontal + v*vertical);
+
+
 
                     int ir = int(255.99 * r);
                     int ig = int(255.99 * g);

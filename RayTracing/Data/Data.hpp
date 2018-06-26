@@ -49,6 +49,16 @@ namespace RayTracing
             }
         }
 
+        Camera* getCamera()
+        {
+            return camera_;
+        }
+
+        std::vector<Object *> getObjects()
+        {
+            return objects_;
+        }
+
     };
 }
 
