@@ -15,14 +15,14 @@
 #include <vector>
 #include <regex>
 #include "Util.hpp"
-#include "../RayTracing/Camera/Camera.hpp"
-#include "../RayTracing/Light/Light.hpp"
-#include "../RayTracing/Pigment/Solid.hpp"
-#include "../RayTracing/Pigment/Checker.hpp"
-#include "../RayTracing/Pigment/TextureMap.hpp"
-#include "../RayTracing/Finishing/Finishing.hpp"
-#include "../RayTracing/Object/Sphere.hpp"
-#include "../RayTracing/Object/Polyhedron.hpp"
+#include "../RayTracing/Data/Camera/Camera.hpp"
+#include "../RayTracing/Data/Light/Light.hpp"
+#include "../RayTracing/Data/Pigment/Solid.hpp"
+#include "../RayTracing/Data/Pigment/Checker.hpp"
+#include "../RayTracing/Data/Pigment/TextureMap.hpp"
+#include "../RayTracing/Data/Finishing/Finishing.hpp"
+#include "../RayTracing/Data/Object/Sphere.hpp"
+#include "../RayTracing/Data/Object/Polyhedron.hpp"
 
 namespace RayTracing
 {
@@ -31,7 +31,9 @@ namespace RayTracing
 
     private:
 
-        std::vector<std::string> file_scene;
+        std::string file_path_;
+
+        std::vector<std::string> file_scene = {};
 
         uint total_lights;
         uint total_pigments;
@@ -41,10 +43,34 @@ namespace RayTracing
 
     public:
 
-        explicit File(const std::string& file_path) : jump_index(5)
+        explicit File(std::string file_path) : file_path_(std::move(file_path)), jump_index(5) {}
+
+        void writeOnFile()
         {
             std::fstream fs;
-            fs.open(file_path, std::fstream::in);
+            fs.open(file_path_, std::fstream::app);
+
+            fs << "Foo bar";
+
+            fs.close();
+        }
+
+        void clearFile()
+        {
+            std::fstream fs;
+            fs.open(file_path_, std::fstream::out | std::fstream::trunc);
+            fs.close();
+        }
+
+        void loadFileScene()
+        {
+            std::fstream fs;
+            fs.open(file_path_, std::fstream::in);
+
+            if (!fs.is_open()) {
+                std::cerr << "Cant open file "  << file_path_ << std::endl;
+            }
+
             this->file_scene = Util::ReadStream(fs);
             fs.close();
         }

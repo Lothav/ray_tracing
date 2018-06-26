@@ -10,25 +10,25 @@ add_executable(
         Util/File.cpp
         Util/File.hpp
 
-        RayTracing/Camera/Camera.hpp
-        RayTracing/Camera/Camera.cpp
-        RayTracing/Light/Light.hpp
-        RayTracing/Light/Light.cpp
-        RayTracing/Pigment/Pigment.hpp
-        RayTracing/Pigment/Pigment.cpp
-        RayTracing/Pigment/Solid.cpp
-        RayTracing/Pigment/Solid.hpp
-        RayTracing/Pigment/Checker.cpp
-        RayTracing/Pigment/Checker.hpp
-        RayTracing/Pigment/TextureMap.cpp
-        RayTracing/Pigment/TextureMap.hpp
-        RayTracing/Finishing/Finishing.cpp
-        RayTracing/Finishing/Finishing.hpp
-        RayTracing/Object/Object.cpp
-        RayTracing/Object/Object.hpp
-        RayTracing/Object/Sphere.cpp
-        RayTracing/Object/Sphere.hpp
-        RayTracing/Object/Polyhedron.cpp
-        RayTracing/Object/Polyhedron.hpp
-        RayTracing/Data.hpp
-)
+        RayTracing/Data/Camera/Camera.hpp
+        RayTracing/Data/Camera/Camera.cpp
+        RayTracing/Data/Light/Light.hpp
+        RayTracing/Data/Light/Light.cpp
+        RayTracing/Data/Pigment/Pigment.hpp
+        RayTracing/Data/Pigment/Pigment.cpp
+        RayTracing/Data/Pigment/Solid.cpp
+        RayTracing/Data/Pigment/Solid.hpp
+        RayTracing/Data/Pigment/Checker.cpp
+        RayTracing/Data/Pigment/Checker.hpp
+        RayTracing/Data/Pigment/TextureMap.cpp
+        RayTracing/Data/Pigment/TextureMap.hpp
+        RayTracing/Data/Finishing/Finishing.cpp
+        RayTracing/Data/Finishing/Finishing.hpp
+        RayTracing/Data/Object/Object.cpp
+        RayTracing/Data/Object/Object.hpp
+        RayTracing/Data/Object/Sphere.cpp
+        RayTracing/Data/Object/Sphere.hpp
+        RayTracing/Data/Object/Polyhedron.cpp
+        RayTracing/Data/Object/Polyhedron.hpp
+        RayTracing/Data/Data.hpp
+        RayTracing/RayTracing.hpp RayTracing/RayTracing.cpp RayTracing/RayTracing.hpp)

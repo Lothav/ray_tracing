@@ -6,7 +6,7 @@
 #define RAY_TRACING_DATA_HPP
 
 #include <string>
-#include "../Util/File.hpp"
+#include "../../Util/File.hpp"
 #include "Camera/Camera.hpp"
 #include "Light/Light.hpp"
 #include "Pigment/Pigment.hpp"
@@ -33,6 +33,7 @@ namespace RayTracing
         void loadFromfile(const std::string& path)
         {
             auto file = std::make_unique<RayTracing::File>(path);
+            file->loadFileScene();
 
             camera_     = file->loadCamera();
             lights_     = file->loadLights();
