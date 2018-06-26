@@ -23,6 +23,10 @@ namespace RayTracing
         Sphere(int pigment_index, int finish_index, glm::vec3 pos, float radius)
                 : Object(pigment_index, finish_index), pos_(pos), radius_(radius) {}
 
+        bool checkIntersection(Ray* ray) override
+        {
+            return false;
+        };
     };
 }
 

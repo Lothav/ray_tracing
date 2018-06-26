@@ -8,17 +8,27 @@
 
 #include "Data/Data.hpp"
 
-class RayTracing {
+namespace RayTracing
+{
 
-private:
+    class RayTracing {
 
-    Data * data_ = nullptr;
+    private:
 
-public:
+        Data * data_ = nullptr;
 
-    RayTracing(Data* data) : data_(data) {}
+    public:
 
-};
+        RayTracing(Data* data) : data_(data) {}
 
+        void dispatchRay()
+        {
+            auto ray = new Ray({.0f, .0f, .0f}, {.0f, .0f, 1.f});
+            data_->checkIntersection(ray);
+        }
+
+    };
+
+}
 
 #endif //RAY_TRACING_RAYTRACING_HPP

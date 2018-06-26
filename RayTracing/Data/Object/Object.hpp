@@ -5,6 +5,8 @@
 #ifndef RAY_TRACING_OBJECT_HPP
 #define RAY_TRACING_OBJECT_HPP
 
+#include "../../Ray.hpp"
+
 namespace RayTracing
 {
     class Object
@@ -16,6 +18,13 @@ namespace RayTracing
     protected:
 
         Object(int pigment_index, int finish_index) : pigment_index_(pigment_index), finish_index_(finish_index) {}
+
+    public:
+
+        virtual bool checkIntersection(Ray* ray)
+        {
+            return false;
+        };
 
     };
 }

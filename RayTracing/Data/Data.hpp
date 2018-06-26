@@ -42,6 +42,13 @@ namespace RayTracing
             objects_    = file->loadObjects();
         }
 
+        void checkIntersection(Ray* ray)
+        {
+            for (auto object: objects_) {
+                object->checkIntersection(ray);
+            }
+        }
+
     };
 }
 

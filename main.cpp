@@ -18,7 +18,8 @@ int main(int argc, char* argv[])
     auto* ray_tracing_data = new RayTracing::Data();
     ray_tracing_data->loadFromfile(argv[1]);
 
-    auto* ray_tracing = new RayTracing(ray_tracing_data);
+    auto* ray_tracing = new RayTracing::RayTracing(ray_tracing_data);
+    ray_tracing->dispatchRay();
 
     auto file = std::make_unique<RayTracing::File>(argv[2]);
     file->clearFile();

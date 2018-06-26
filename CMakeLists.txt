@@ -33,4 +33,5 @@ add_executable(
         RayTracing/Data/Data.hpp
         RayTracing/RayTracing.hpp
         RayTracing/RayTracing.cpp
+        RayTracing/Ray.cpp RayTracing/Ray.hpp
 )
