@@ -32,7 +32,7 @@ namespace RayTracing
             auto b = 2.0f * glm::dot(oc, ray->getDirection());
             auto c = glm::dot(oc, oc) - radius_*radius_;
 
-            return (b*b - 4*a*c) > 0;
+            return (b*b - 4*a*c) >= 0;
         };
     };
 }
