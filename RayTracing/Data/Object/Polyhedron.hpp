@@ -7,6 +7,7 @@
 
 #include <glm/vec4.hpp>
 #include <vector>
+#include <glm/geometric.hpp>
 #include "Object.hpp"
 
 namespace RayTracing
@@ -27,6 +28,23 @@ namespace RayTracing
         {
             this->planes_.push_back(plane);
         }
+
+        bool checkIntersection(Ray* ray) override
+        {
+            for (auto& plane : planes_) {
+                // check parallel
+                if (glm::dot(ray->getDirection() - ray->getOrigin(), glm::vec3(plane)) == 0.f) {
+                    return false;
+                }
+
+                auto s1 = -(plane.x * ray->getOrigin().x + plane.y * ray->getOrigin().y + plane.z * ray->getOrigin().z + plane.w)
+                          / (glm::dot(glm::vec3(plane), ray->getDirection() - ray->getOrigin()));
+
+                return s1 <= 0.f;
+            }
+            return true;
+        }
+
     };
 }
 

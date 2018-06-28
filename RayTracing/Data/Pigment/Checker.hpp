@@ -24,6 +24,11 @@ namespace RayTracing
 
         Checker(glm::vec3 color_a, glm::vec3 color_b, float size) : color_a_(color_a), color_b_(color_b), size_(size) {}
 
+        glm::vec3 getColor() override
+        {
+            return glm::vec3(1.f);
+        }
+
     };
 }
 
