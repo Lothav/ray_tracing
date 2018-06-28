@@ -15,6 +15,13 @@ namespace RayTracing
 
         Pigment() {}
 
+    public:
+
+        virtual glm::vec3 getColor()
+        {
+            return glm::vec3(0.f);
+        }
+
     };
 
 }

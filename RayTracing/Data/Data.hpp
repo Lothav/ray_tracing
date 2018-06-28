@@ -22,7 +22,7 @@ namespace RayTracing
 
         Camera*                         camera_;
         std::vector<Light *>            lights_;
-        std::vector<Pigment *>          pigmentss_;
+        std::vector<Pigment *>          pigments_;
         std::vector<Finishing *>        finishes_;
         std::vector<Object *>           objects_;
 
@@ -37,7 +37,7 @@ namespace RayTracing
 
             camera_     = file->loadCamera();
             lights_     = file->loadLights();
-            pigmentss_  = file->loadPigments();
+            pigments_   = file->loadPigments();
             finishes_   = file->loadFinishes();
             objects_    = file->loadObjects();
         }
@@ -49,12 +49,17 @@ namespace RayTracing
             }
         }
 
-        Camera* getCamera()
+        Camera* getCamera() const
         {
             return camera_;
         }
 
-        std::vector<Object *> getObjects()
+        std::vector<Pigment*> getPigment() const
+        {
+            return pigments_;
+        }
+
+        std::vector<Object *> getObjects() const
         {
             return objects_;
         }

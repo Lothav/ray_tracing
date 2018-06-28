@@ -17,13 +17,13 @@ namespace RayTracing
 
         Data* data_ = nullptr;
 
-        std::vector<std::vector<uint>> color_map_;
+        std::vector<std::vector<glm::vec3>> color_map_;
 
     public:
 
         RayTracing(Data* data) : data_(data) {}
 
-        std::vector<std::vector<uint>> getColorMap() const
+        std::vector<std::vector<glm::vec3>> getColorMap() const
         {
             return color_map_;
         }
@@ -58,14 +58,12 @@ namespace RayTracing
                     auto direction = lower_left_corner + u*glm::vec3(projection_plane_len*2, 0, 0) + v*glm::vec3(0, projection_plane_len*2, 0);
                     direction.z = -((projection_plane_equation.x * direction.x) + (projection_plane_equation.y * direction.y) + projection_plane_d) / (projection_plane_equation.z);
 
-
                     auto* ray = new Ray(camera->getEye(), direction);
 
-                    uint color = 0;
+                    glm::vec3 color(.0f);
                     for (auto& object : data_->getObjects()) {
                         if (object->checkIntersection(ray)) {
-                            color = 1;
-                            break;
+                            color = data_->getPigment()[object->getPigmentIndex()]->getColor() ;
                         }
                     }
 

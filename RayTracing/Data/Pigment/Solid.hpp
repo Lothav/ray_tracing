@@ -22,6 +22,11 @@ namespace RayTracing
 
         Solid(glm::vec3 color) : color_(color) {}
 
+        glm::vec3 getColor() override
+        {
+            return glm::vec3(1.f);
+        }
+
     };
 }
 

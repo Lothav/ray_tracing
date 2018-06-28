@@ -26,6 +26,11 @@ namespace RayTracing
             return false;
         };
 
+        int getPigmentIndex() const
+        {
+            return pigment_index_;
+        }
+
     };
 }
 
