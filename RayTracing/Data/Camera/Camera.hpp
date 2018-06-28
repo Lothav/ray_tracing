@@ -14,11 +14,11 @@ namespace RayTracing
 
     private:
 
-        glm::vec3   eye_;
-        glm::vec3   center_;
-        glm::vec3   up_;
+        glm::vec3   eye_;       // Camera position.
+        glm::vec3   center_;    // Where camera is point to.
+        glm::vec3   up_;        // Camera normal vector.
 
-        float       fov_;
+        float       fov_;       // Field of view.
 
     public:
 

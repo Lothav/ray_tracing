@@ -42,11 +42,17 @@ namespace RayTracing
                     auto u = static_cast<float>(i) / static_cast<float>(projection_plane_len);
                     auto v = static_cast<float>(j) / static_cast<float>(projection_plane_len);
 
-                    auto* ray = new Ray(camera->getCenter(), lower_left_corner + u*horizontal + v*vertical);
+                    auto* ray = new Ray(camera->getEye(), lower_left_corner + u*horizontal + v*vertical);
 
+                    uint color = 0;
                     for (auto& object : data_->getObjects()) {
-                        // this->color_map.push_back(object->checkIntersection(ray) ? : )
+                        if (object->checkIntersection(ray)) {
+                            color = 1;
+                            break;
+                        }
                     }
+
+                    this->color_map[this->color_map.size()-1].push_back(color);
 
                     delete ray;
                 }
