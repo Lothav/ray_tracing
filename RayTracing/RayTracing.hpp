@@ -37,10 +37,10 @@ namespace RayTracing
             auto camera_up                   = camera->getUp();
 
             auto projection_plane_normal     = glm::normalize(camera_eye - camera_center);
-            float projection_plane_d         = -(glm::dot(camera_center, projection_plane_normal));
+            auto projection_plane_d         = static_cast<float>(-(glm::dot(camera_center, projection_plane_normal)));
             auto projection_plane_equation   = glm::vec4(projection_plane_normal, projection_plane_d);
 
-            float projection_plane_len       = glm::length(camera_eye - camera_center) * glm::tan(glm::radians(camera->getFov()));
+            auto projection_plane_len       = static_cast<float>(glm::length(camera_eye - camera_center) * glm::tan(glm::radians(camera->getFov())));
 
             auto x = camera_center.x - projection_plane_len;
             auto y = camera_center.y - projection_plane_len;
@@ -68,7 +68,7 @@ namespace RayTracing
                             if (intersections.empty()) continue;
 
                             for (auto &intersection : intersections) {
-                                float distance = glm::length(camera->getEye() - intersection);
+                                auto distance = static_cast<float>(glm::length(camera->getEye() - intersection));
                                 if (distance < min_distance) {
                                     near_object  = object;
                                     min_distance = distance;

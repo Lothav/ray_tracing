@@ -37,7 +37,7 @@ namespace RayTracing
 
             for (auto& plane : planes_) {
 
-                float dot_plane_vec = glm::dot(ray_direction, glm::vec3(plane));
+                auto dot_plane_vec = static_cast<float>(glm::dot(ray_direction, glm::vec3(plane)));
 
                 // check parallel
                 if (dot_plane_vec == 0.f) {
@@ -49,8 +49,8 @@ namespace RayTracing
                           + plane.z * ray_origin.z
                           + plane.w) / dot_plane_vec;
 
-                if (s1 <= 0.f) {
-                    auto intersection_point = ray->getOrigin() + (ray_direction*s1);
+                if (s1 >= 0.f) {
+                    auto intersection_point = ray->getOrigin() + (ray_direction * s1);
 
                     intersections.push_back(intersection_point);
                 }

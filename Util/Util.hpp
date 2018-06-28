@@ -10,6 +10,7 @@
 #include <vector>
 #include <string>
 #include <regex>
+#include <iostream>
 
 
 namespace RayTracing
@@ -86,6 +87,11 @@ namespace RayTracing
             }
 
             return ret;
+        }
+
+        static void PrintVec3(glm::vec3 vec3)
+        {
+            std::cout << "(" << vec3.x << "," << vec3.y << "," << vec3.z << ")" << std::endl;
         }
 
     };
