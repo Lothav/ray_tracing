@@ -17,11 +17,16 @@ namespace RayTracing
 
         Data* data_ = nullptr;
 
-        std::vector<std::vector<uint>> color_map;
+        std::vector<std::vector<uint>> color_map_;
 
     public:
 
         RayTracing(Data* data) : data_(data) {}
+
+        std::vector<std::vector<uint>> getColorMap() const
+        {
+            return color_map_;
+        }
 
         void fillColorMap()
         {
@@ -44,7 +49,7 @@ namespace RayTracing
             auto lower_left_corner = glm::vec3(x, y, z);
 
             for (int i = 0; i < projection_plane_len * 2; i++) {
-                this->color_map.push_back({});
+                this->color_map_.push_back({});
                 for (int j = 0; j < projection_plane_len * 2; j++) {
 
                     auto u = static_cast<float>(i) / (projection_plane_len * 2);
@@ -53,7 +58,6 @@ namespace RayTracing
                     auto direction = lower_left_corner + u*glm::vec3(projection_plane_len*2, 0, 0) + v*glm::vec3(0, projection_plane_len*2, 0);
                     direction.z = -((projection_plane_equation.x * direction.x) + (projection_plane_equation.y * direction.y) + projection_plane_d) / (projection_plane_equation.z);
 
-                    std::cout << "(" << direction.x << ", " << direction.y << ", " << direction.z << ")" << std::endl;
 
                     auto* ray = new Ray(camera->getEye(), direction);
 
@@ -65,7 +69,7 @@ namespace RayTracing
                         }
                     }
 
-                    this->color_map[this->color_map.size()-1].push_back(color);
+                    this->color_map_[this->color_map_.size()-1].push_back(color);
 
                     delete ray;
                 }

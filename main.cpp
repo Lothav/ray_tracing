@@ -23,7 +23,7 @@ int main(int argc, char* argv[])
 
     auto file = std::make_unique<RayTracing::File>(argv[2]);
     file->clearFile();
-    file->writePPM(200, 100);
+    file->writePPM(ray_tracing->getColorMap());
 
     return EXIT_SUCCESS;
 }

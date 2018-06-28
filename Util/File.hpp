@@ -45,21 +45,19 @@ namespace RayTracing
 
         explicit File(std::string file_path) : file_path_(std::move(file_path)), jump_index(5) {}
 
-        void writePPM(uint nx, uint ny)
+        void writePPM(const std::vector<std::vector<uint>>& color_map)
         {
             std::fstream fs;
             fs.open(file_path_, std::fstream::app);
 
-            fs << "P3\n" << nx << " " << ny << "\n255\n";
+            fs << "P3\n" << color_map[0].size() << " " << color_map.size() << "\n255\n";
 
-            for (int j = ny-1; j >= 0; j--) {
-                for (int i = 0; i < nx; i++) {
-
-
-                    // int ir = int(255.99 * r);
-                    // int ig = int(255.99 * g);
-                    // int ib = int(255.99 * b);
-                    // fs << ir << " " << ig << " " << ib << "\n";
+            for (int j = 0; j < color_map[0].size(); j++) {
+                for (int i = 0; i < color_map.size(); i++) {
+                     auto ir = int(255.99 * color_map[i][j]);
+                     auto ig = int(255.99 * color_map[i][j]);
+                     auto ib = int(255.99 * color_map[i][j]);
+                     fs << ir << " " << ig << " " << ib << "\n";
                 }
             }
 
