@@ -23,29 +23,29 @@ namespace RayTracing
 
         RayTracing(Data* data) : data_(data) {}
 
-        void dispatchRay(Ray* ray)
-        {
-            data_->checkIntersection(ray);
-        }
-
-        void fillColorMap(uint nx, uint ny)
+        void fillColorMap()
         {
             auto* camera = data_->getCamera();
 
-            glm::vec3 lower_left_corner = {-2.0, -1.0, -1.0};
-            glm::vec3 horizontal = {4.0, .0, .0};
-            glm::vec3 vertical = {.0, 2.0, .0};
+            auto camera_eye                  = camera->getEye();
+            auto camera_center               = camera->getCenter();
 
-            for (int j = ny-1; j >= 0; j--) {
-                for (int i = 0; i < nx; i++) {
+            auto projection_plane_normal     = glm::normalize(camera_eye - camera_center);
+            float projection_plane_d         = -(glm::dot(camera_center, projection_plane_normal));
+            auto projection_plane_equation   = glm::vec4(projection_plane_normal, projection_plane_d);
 
-                    auto u = static_cast<float>(i) / static_cast<float>(nx);
-                    auto v = static_cast<float>(j) / static_cast<float>(ny);
+            int projection_plane_len         = glm::length(camera_eye - camera_center) * glm::tan(glm::radians(camera->getFov())) * 2;
+
+            for (int i = 0; i < projection_plane_len; i++) {
+                for (int j = 0; j < projection_plane_len; j--) {
+
+                    auto u = static_cast<float>(i) / static_cast<float>(projection_plane_len);
+                    auto v = static_cast<float>(j) / static_cast<float>(projection_plane_len);
 
                     auto* ray = new Ray(camera->getCenter(), lower_left_corner + u*horizontal + v*vertical);
 
                     for (auto& object : data_->getObjects()) {
-                        this->color_map.push_back(object->checkIntersection(ray) ? : )
+                        // this->color_map.push_back(object->checkIntersection(ray) ? : )
                     }
 
                     delete ray;
