@@ -32,13 +32,18 @@ namespace RayTracing
         bool checkIntersection(Ray* ray) override
         {
             for (auto& plane : planes_) {
+
+                float dot_plane_vec = glm::dot(ray->getDirection() - ray->getOrigin(), glm::vec3(plane));
+
                 // check parallel
-                if (glm::dot(ray->getDirection() - ray->getOrigin(), glm::vec3(plane)) == 0.f) {
+                if (dot_plane_vec == 0.f) {
                     return false;
                 }
 
-                auto s1 = -(plane.x * ray->getOrigin().x + plane.y * ray->getOrigin().y + plane.z * ray->getOrigin().z + plane.w)
-                          / (glm::dot(glm::vec3(plane), ray->getDirection() - ray->getOrigin()));
+                auto s1 = -(plane.x * ray->getOrigin().x
+                          + plane.y * ray->getOrigin().y
+                          + plane.z * ray->getOrigin().z
+                          + plane.w) / dot_plane_vec;
 
                 return s1 <= 0.f;
             }
