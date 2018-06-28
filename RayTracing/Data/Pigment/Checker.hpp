@@ -28,13 +28,17 @@ namespace RayTracing
 
         glm::vec3 getColor(glm::vec3 pos, glm::vec3 plane_point) override
         {
-            auto distance = glm::length(plane_point - pos);
+            auto color = pos.x < 0.f ? color_a_ : color_b_;
 
-            if (static_cast<int>(distance / size_) % 2 == 0) {
-                return color_a_;
+            if (static_cast<int>(pos.x / size_) % 2 == 0) {
+                color = pos.x < 0.f ? color_b_ : color_a_;
             }
 
-            return color_b_;
+            if (static_cast<int>(pos.y / size_) % 2 == 0) {
+                color = color == color_a_ ? color_b_ : color_a_;
+            }
+
+            return color;
         }
 
     };
