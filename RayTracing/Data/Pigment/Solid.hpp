@@ -24,7 +24,7 @@ namespace RayTracing
 
         glm::vec3 getColor() override
         {
-            return glm::vec3(1.f);
+            return color_;
         }
 
     };

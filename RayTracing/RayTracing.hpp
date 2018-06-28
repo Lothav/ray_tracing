@@ -63,7 +63,7 @@ namespace RayTracing
                     glm::vec3 color(.0f);
                     for (auto& object : data_->getObjects()) {
                         if (object->checkIntersection(ray)) {
-                            color = data_->getPigment()[object->getPigmentIndex()]->getColor();
+                            color = data_->getPigment()[object->getPigmentIndex()]->getColor(glm::vec3(direction), camera_center);
                         }
                     }
 

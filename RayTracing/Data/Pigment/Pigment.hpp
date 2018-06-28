@@ -5,6 +5,7 @@
 #ifndef RAY_TRACING_PIGMENT_HPP
 #define RAY_TRACING_PIGMENT_HPP
 #include <glm/vec3.hpp>
+#include <glm/vec4.hpp>
 
 namespace RayTracing
 {
@@ -19,7 +20,12 @@ namespace RayTracing
 
         virtual glm::vec3 getColor()
         {
-            return glm::vec3(0.f);
+            return glm::vec3(0.f, 1.f, 0.f);
+        }
+
+        virtual glm::vec3 getColor(glm::vec3 pos, glm::vec3 plane_point)
+        {
+            return getColor();
         }
 
     };

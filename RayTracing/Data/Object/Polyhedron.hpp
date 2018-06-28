@@ -21,8 +21,7 @@ namespace RayTracing
 
     public:
 
-        Polyhedron(int pigment_index, int finish_index)
-                : Object(pigment_index, finish_index), planes_({}) {}
+        Polyhedron(int pigment_index, int finish_index) : Object(pigment_index, finish_index), planes_({}) {}
 
         void addPlane(glm::vec4 plane)
         {
@@ -31,18 +30,21 @@ namespace RayTracing
 
         bool checkIntersection(Ray* ray) override
         {
+            auto ray_origin     = ray->getOrigin();
+            auto ray_direction  = ray->getDirection();
+
             for (auto& plane : planes_) {
 
-                float dot_plane_vec = glm::dot(ray->getDirection() - ray->getOrigin(), glm::vec3(plane));
+                float dot_plane_vec = glm::dot(ray_direction - ray_origin, glm::vec3(plane));
 
                 // check parallel
                 if (dot_plane_vec == 0.f) {
                     return false;
                 }
 
-                auto s1 = -(plane.x * ray->getOrigin().x
-                          + plane.y * ray->getOrigin().y
-                          + plane.z * ray->getOrigin().z
+                auto s1 = -(plane.x * ray_origin.x
+                          + plane.y * ray_origin.y
+                          + plane.z * ray_origin.z
                           + plane.w) / dot_plane_vec;
 
                 return s1 <= 0.f;
