@@ -6,6 +6,7 @@
 #define RAY_TRACING_OBJECT_HPP
 
 #include "../../Ray.hpp"
+#include <vector>
 
 namespace RayTracing
 {
@@ -21,9 +22,9 @@ namespace RayTracing
 
     public:
 
-        virtual bool checkIntersection(Ray* ray)
+        virtual std::vector<glm::vec3> getIntersections(Ray* ray)
         {
-            return false;
+            return {};
         };
 
         int getPigmentIndex() const

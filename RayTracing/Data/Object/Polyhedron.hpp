@@ -28,18 +28,20 @@ namespace RayTracing
             this->planes_.push_back(plane);
         }
 
-        bool checkIntersection(Ray* ray) override
+        std::vector<glm::vec3> getIntersections(Ray* ray) override
         {
+            std::vector<glm::vec3> intersections = {};
+
             auto ray_origin     = ray->getOrigin();
-            auto ray_direction  = ray->getDirection();
+            auto ray_direction  = glm::normalize(ray->getDirection() - ray->getOrigin());
 
             for (auto& plane : planes_) {
 
-                float dot_plane_vec = glm::dot(ray_direction - ray_origin, glm::vec3(plane));
+                float dot_plane_vec = glm::dot(ray_direction, glm::vec3(plane));
 
                 // check parallel
                 if (dot_plane_vec == 0.f) {
-                    return false;
+                    continue;
                 }
 
                 auto s1 = -(plane.x * ray_origin.x
@@ -47,9 +49,14 @@ namespace RayTracing
                           + plane.z * ray_origin.z
                           + plane.w) / dot_plane_vec;
 
-                return s1 <= 0.f;
+                if (s1 <= 0.f) {
+                    auto intersection_point = ray->getOrigin() + (ray_direction*s1);
+
+                    intersections.push_back(intersection_point);
+                }
             }
-            return true;
+
+            return intersections;
         }
 
     };

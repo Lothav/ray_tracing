@@ -58,18 +58,34 @@ namespace RayTracing
                     auto direction = lower_left_corner + u*glm::vec3(projection_plane_len*2, 0, 0) + v*glm::vec3(0, projection_plane_len*2, 0);
                     direction.z = -((projection_plane_equation.x * direction.x) + (projection_plane_equation.y * direction.y) + projection_plane_d) / (projection_plane_equation.z);
 
-                    auto* ray = new Ray(camera->getEye(), direction);
+                    Object* near_object = nullptr;
+                    {
+                        auto* ray = new Ray(camera->getEye(), direction);
+                        float min_distance = MAXFLOAT;
+                        for (auto& object : data_->getObjects()) {
 
-                    glm::vec3 color(.0f);
-                    for (auto& object : data_->getObjects()) {
-                        if (object->checkIntersection(ray)) {
-                            color = data_->getPigment()[object->getPigmentIndex()]->getColor(glm::vec3(direction), camera_center);
+                            auto intersections = object->getIntersections(ray);
+                            if (intersections.empty()) continue;
+
+                            for (auto &intersection : intersections) {
+                                float distance = glm::length(camera->getEye() - intersection);
+                                if (distance < min_distance) {
+                                    near_object  = object;
+                                    min_distance = distance;
+                                }
+                            }
                         }
+                        delete ray;
                     }
 
-                    this->color_map_[this->color_map_.size()-1].push_back(color);
+                    {
+                        glm::vec3 color(.0f);
+                        if (near_object != nullptr) {
+                            color = data_->getPigment()[near_object->getPigmentIndex()]->getColor(glm::vec3(direction), camera_center);
+                        }
 
-                    delete ray;
+                        this->color_map_[this->color_map_.size()-1].push_back(color);
+                    }
                 }
             }
         }
