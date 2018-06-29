@@ -32,35 +32,37 @@ namespace RayTracing
         {
             auto* camera = data_->getCamera();
 
-            auto camera_eye                  = camera->getEye();
-            auto camera_center               = camera->getCenter();
-            auto camera_up                   = camera->getUp();
+            auto camera_eye                 = camera->getEye();
+            auto camera_center              = camera->getCenter();
+            auto camera_up                  = camera->getUp();
 
-            auto projection_plane_normal     = glm::normalize(camera_eye - camera_center);
-            auto projection_plane_d         = static_cast<float>(-(glm::dot(camera_center, projection_plane_normal)));
-            auto projection_plane_equation   = glm::vec4(projection_plane_normal, projection_plane_d);
+            auto projection_plane_normal    = glm::normalize(camera_eye - camera_center);
+            auto projection_plane_d         = -static_cast<float>(glm::dot(camera_center, projection_plane_normal));
+            auto projection_plane_equation  = glm::vec4(projection_plane_normal, projection_plane_d);
+            auto projection_plane_len       = static_cast<float>(glm::length(camera_eye - camera_center) * glm::tan(glm::radians(90 - camera->getFov())));
 
-            auto projection_plane_len       = static_cast<float>(glm::length(camera_eye - camera_center) * glm::tan(glm::radians(camera->getFov())));
+            auto lower_left_corner = glm::vec3(
+                camera_center.x - projection_plane_len,
+                camera_center.y - projection_plane_len,
+                camera_center.z - projection_plane_len
+            );
 
-            auto x = camera_center.x - projection_plane_len;
-            auto y = camera_center.y - projection_plane_len;
-            auto z = -((projection_plane_equation.x * x) + (projection_plane_equation.y * y) + projection_plane_d) / (projection_plane_equation.z);
+            auto size = projection_plane_len * 2;
 
-            auto lower_left_corner = glm::vec3(x, y, z);
-
-            for (int i = 0; i < projection_plane_len * 2; i++) {
+            for (int i = 0; i < size; i++) {
                 this->color_map_.push_back({});
-                for (int j = 0; j < projection_plane_len * 2; j++) {
+                for (int j = 0; j < size; j++) {
 
-                    auto u = static_cast<float>(i) / (projection_plane_len * 2);
-                    auto v = static_cast<float>(j) / (projection_plane_len * 2);
+                    auto u = static_cast<float>(i) / size;
+                    auto v = static_cast<float>(j) / size;
 
-                    auto direction = lower_left_corner + u*glm::vec3(projection_plane_len*2, 0, 0) + v*glm::vec3(0, projection_plane_len*2, 0);
-                    direction.z = -((projection_plane_equation.x * direction.x) + (projection_plane_equation.y * direction.y) + projection_plane_d) / (projection_plane_equation.z);
+                    auto direction = lower_left_corner + u*glm::vec3(size, 0, 0) + v*glm::vec3(0, size, 0);
+                    direction.z = -((camera_center.x * direction.x) + (camera_center.y * direction.y) + projection_plane_d) / (camera_center.z);
 
                     Object* near_object = nullptr;
                     {
                         auto* ray = new Ray(camera->getEye(), direction);
+
                         float min_distance = MAXFLOAT;
                         for (auto& object : data_->getObjects()) {
 
