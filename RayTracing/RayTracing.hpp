@@ -63,6 +63,7 @@ namespace RayTracing
 
                     auto* ray = new Ray(camera->getEye(), direction);
 
+                    glm::vec3 min_intersection = {};
                     float min_distance = MAXFLOAT;
                     for (auto& object : data_->getObjects()) {
 
@@ -72,8 +73,9 @@ namespace RayTracing
                         for (auto &intersection : intersections) {
                             auto distance = static_cast<float>(glm::length(camera->getEye() - intersection));
                             if (distance < min_distance) {
-                                near_object  = object;
-                                min_distance = distance;
+                                near_object      = object;
+                                min_distance     = distance;
+                                min_intersection = intersection;
                             }
                         }
                     }
@@ -81,7 +83,7 @@ namespace RayTracing
 
                     glm::vec3 color(.0f);
                     if (near_object != nullptr) {
-                        color = pigments[near_object->getPigmentIndex()]->getColor(direction, lower_left_corner);
+                        color = pigments[near_object->getPigmentIndex()]->getColor(min_intersection);
                     }
 
                     this->color_map_[this->color_map_.size()-1].push_back(color);

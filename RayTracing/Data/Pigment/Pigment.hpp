@@ -23,7 +23,7 @@ namespace RayTracing
             return glm::vec3(0.f, 0.f, 0.f);
         }
 
-        virtual glm::vec3 getColor(glm::vec3 pos, glm::vec3 plane_point)
+        virtual glm::vec3 getColor(glm::vec3 intersection)
         {
             return getColor();
         }

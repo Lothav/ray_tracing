@@ -24,19 +24,17 @@ namespace RayTracing
 
     public:
 
-        Checker(glm::vec3 color_a, glm::vec3 color_b, float size) : color_a_(color_a), color_b_(color_b), size_(size/10) {}
+        Checker(glm::vec3 color_a, glm::vec3 color_b, float size) : color_a_(color_a), color_b_(color_b), size_(size) {}
 
-        glm::vec3 getColor(glm::vec3 pos, glm::vec3 plane_point) override
+        glm::vec3 getColor(glm::vec3 intersection) override
         {
-            auto z_factor = size_/ abs(1/pos.z - 1/plane_point.z );
+            auto color = intersection.x < 0.f ? color_a_ : color_b_;
 
-            auto color = pos.x < 0.f ? color_a_ : color_b_;
-
-            if (static_cast<int>(pos.x / z_factor) % 2 == 0) {
-                color = pos.x < 0.f ? color_b_ : color_a_;
+            if (static_cast<int>(intersection.x / size_) % 2 == 0) {
+                color = intersection.x < 0.f ? color_b_ : color_a_;
             }
 
-            if (static_cast<int>(pos.y / z_factor) % 2 == 0) {
+            if (static_cast<int>(intersection.z / size_) % 2 == 0) {
                 color = color == color_a_ ? color_b_ : color_a_;
             }
 
