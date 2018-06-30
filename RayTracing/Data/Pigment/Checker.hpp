@@ -28,7 +28,7 @@ namespace RayTracing
 
         glm::vec3 getColor(glm::vec3 pos, glm::vec3 plane_point) override
         {
-            auto z_factor = (plane_point.y - pos.y) / size_;
+            auto z_factor = size_/ abs(1/pos.z - 1/plane_point.z );
 
             auto color = pos.x < 0.f ? color_a_ : color_b_;
 
@@ -36,7 +36,7 @@ namespace RayTracing
                 color = pos.x < 0.f ? color_b_ : color_a_;
             }
 
-            if (static_cast<int>(pos.z / z_factor) % 2 == 0) {
+            if (static_cast<int>(pos.y / z_factor) % 2 == 0) {
                 color = color == color_a_ ? color_b_ : color_a_;
             }
 

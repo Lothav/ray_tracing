@@ -30,7 +30,8 @@ namespace RayTracing
 
         void fillColorMap()
         {
-            auto* camera = data_->getCamera();
+            auto* camera  = data_->getCamera();
+            auto pigments = data_->getPigment();
 
             auto camera_eye              = camera->getEye();
             auto camera_center           = camera->getCenter();
@@ -41,9 +42,9 @@ namespace RayTracing
             auto projection_plane_len    = static_cast<float>(glm::length(camera_eye - camera_center) * glm::tan(glm::radians(90 - camera->getFov())));
 
             auto lower_left_corner = glm::vec3(
-                camera_center.x - projection_plane_len,
-                camera_center.y - projection_plane_len,
-                camera_center.z - projection_plane_len
+                    camera_center.x - projection_plane_len,
+                    camera_center.y - projection_plane_len,
+                    camera_center.z - projection_plane_len
             );
 
             auto size = projection_plane_len * 2.f;
@@ -60,34 +61,30 @@ namespace RayTracing
 
                     Object* near_object = nullptr;
 
-                    {
-                        auto* ray = new Ray(camera->getEye(), direction);
+                    auto* ray = new Ray(camera->getEye(), direction);
 
-                        float min_distance = MAXFLOAT;
-                        for (auto& object : data_->getObjects()) {
+                    float min_distance = MAXFLOAT;
+                    for (auto& object : data_->getObjects()) {
 
-                            auto intersections = object->getIntersections(ray);
-                            if (intersections.empty()) continue;
+                        auto intersections = object->getIntersections(ray);
+                        if (intersections.empty()) continue;
 
-                            for (auto &intersection : intersections) {
-                                auto distance = static_cast<float>(glm::length(camera->getEye() - intersection));
-                                if (distance < min_distance) {
-                                    near_object  = object;
-                                    min_distance = distance;
-                                }
+                        for (auto &intersection : intersections) {
+                            auto distance = static_cast<float>(glm::length(camera->getEye() - intersection));
+                            if (distance < min_distance) {
+                                near_object  = object;
+                                min_distance = distance;
                             }
                         }
-                        delete ray;
+                    }
+                    delete ray;
+
+                    glm::vec3 color(.0f);
+                    if (near_object != nullptr) {
+                        color = pigments[near_object->getPigmentIndex()]->getColor(direction, lower_left_corner);
                     }
 
-                    {
-                        glm::vec3 color(.0f);
-                        if (near_object != nullptr) {
-                            color = data_->getPigment()[near_object->getPigmentIndex()]->getColor(glm::vec3(direction), camera_center);
-                        }
-
-                        this->color_map_[this->color_map_.size()-1].push_back(color);
-                    }
+                    this->color_map_[this->color_map_.size()-1].push_back(color);
                 }
             }
         }
