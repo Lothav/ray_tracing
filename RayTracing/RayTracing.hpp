@@ -32,14 +32,13 @@ namespace RayTracing
         {
             auto* camera = data_->getCamera();
 
-            auto camera_eye                 = camera->getEye();
-            auto camera_center              = camera->getCenter();
-            auto camera_up                  = camera->getUp();
+            auto camera_eye              = camera->getEye();
+            auto camera_center           = camera->getCenter();
+            auto camera_up               = camera->getUp();
 
-            auto projection_plane_normal    = glm::normalize(camera_eye - camera_center);
-            auto projection_plane_d         = -static_cast<float>(glm::dot(camera_center, projection_plane_normal));
-            auto projection_plane_equation  = glm::vec4(projection_plane_normal, projection_plane_d);
-            auto projection_plane_len       = static_cast<float>(glm::length(camera_eye - camera_center) * glm::tan(glm::radians(90 - camera->getFov())));
+            auto projection_plane_normal = glm::normalize(camera_eye - camera_center);
+            auto projection_plane_d      = -static_cast<float>(glm::dot(camera_center, projection_plane_normal));
+            auto projection_plane_len    = static_cast<float>(glm::length(camera_eye - camera_center) * glm::tan(glm::radians(90 - camera->getFov())));
 
             auto lower_left_corner = glm::vec3(
                 camera_center.x - projection_plane_len,
@@ -47,7 +46,7 @@ namespace RayTracing
                 camera_center.z - projection_plane_len
             );
 
-            auto size = projection_plane_len * 2;
+            auto size = projection_plane_len * 2.f;
 
             for (int i = 0; i < size; i++) {
                 this->color_map_.push_back({});
@@ -60,6 +59,7 @@ namespace RayTracing
                     direction.z = -((camera_center.x * direction.x) + (camera_center.y * direction.y) + projection_plane_d) / (camera_center.z);
 
                     Object* near_object = nullptr;
+
                     {
                         auto* ray = new Ray(camera->getEye(), direction);
 
@@ -91,6 +91,10 @@ namespace RayTracing
                 }
             }
         }
+
+    private:
+
+
 
     };
 

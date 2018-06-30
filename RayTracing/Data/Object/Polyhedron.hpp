@@ -44,15 +44,10 @@ namespace RayTracing
                     continue;
                 }
 
-                auto s1 = -(plane.x * ray_origin.x
-                          + plane.y * ray_origin.y
-                          + plane.z * ray_origin.z
-                          + plane.w) / dot_plane_vec;
+                auto s1 = -(plane.x * ray_origin.x + plane.y * ray_origin.y + plane.z * ray_origin.z + plane.w) / dot_plane_vec;
 
                 if (s1 >= 0.f) {
-                    auto intersection_point = ray->getOrigin() + (ray_direction * s1);
-
-                    intersections.push_back(intersection_point);
+                    intersections.push_back(ray->getOrigin() + (ray_direction * s1));
                 }
             }
 
