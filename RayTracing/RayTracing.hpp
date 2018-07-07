@@ -66,19 +66,19 @@ namespace RayTracing
                     Object*   near_object = nullptr;
 
                     glm::vec3 pigment(.0f);
-                    if (getIntersection(ray, &near_object, min_intersection, {})) {
-                        if (near_object != nullptr) {
-                            pigment = pigments[near_object->getPigmentIndex()]->getColor(min_intersection);
-                        }
-                        for (auto light: lights) {
-                            auto* ray_l = new Ray(min_intersection, light->getPos() - direction);
+                    if (getIntersection(ray, near_object, min_intersection)) {
+                        for (int k = 1; k < lights.size(); ++k) {
+                            auto light = lights[k];
+                            auto* l_ray = new Ray(min_intersection, light->getPos() - min_intersection);
+
                             glm::vec3 l_min_intersection = {};
-                            if (getIntersection(ray, &near_object, l_min_intersection, {min_intersection})) {
-                                if (glm::length(light->getPos() - min_intersection) < glm::length(l_min_intersection - min_intersection)) {
-                                    std::cout << "found" << std::endl;
-                                }
+                            Object*   l_near_object = nullptr;
+
+                            auto found = getIntersection(l_ray, l_near_object, l_min_intersection);
+                            if (!found || glm::length(light->getPos() - min_intersection) < glm::length(l_min_intersection - min_intersection)) {
+                                pigment = pigments[near_object->getPigmentIndex()]->getColor(min_intersection);
                             }
-                            delete ray_l;
+                            delete l_ray;
                         }
                     }
                     delete ray;
@@ -90,7 +90,7 @@ namespace RayTracing
 
     private:
 
-        bool getIntersection(Ray* ray, Object** near_object, glm::vec3& min_intersection, const std::vector<glm::vec3>& ignore_points)
+        bool getIntersection(Ray* ray, Object*& near_object, glm::vec3& min_intersection)
         {
             auto* camera        = data_->getCamera();
             float min_distance  = MAXFLOAT;
@@ -104,17 +104,9 @@ namespace RayTracing
                 for (auto &intersection : intersections) {
                     auto distance = static_cast<float>(glm::length(camera->getEye() - intersection));
                     if (distance < min_distance) {
+                        if (ray->getOrigin() == intersection) continue;
 
-                        bool ignore = false;
-                        for (auto ignore_point : ignore_points){
-                            if (ignore_point == intersection) {
-                                ignore = true;
-                                break;
-                            }
-                        }
-                        if (ignore) continue;
-
-                        *near_object     = object;
+                        near_object      = object;
                         min_distance     = distance;
                         min_intersection = intersection;
 

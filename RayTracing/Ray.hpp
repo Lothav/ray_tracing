@@ -6,6 +6,7 @@
 #define RAY_TRACING_RAY_HPP
 
 #include <glm/vec3.hpp>
+#include <glm/detail/func_geometric.hpp>
 
 namespace RayTracing
 {
@@ -19,7 +20,7 @@ namespace RayTracing
 
     public:
 
-        Ray (glm::vec3 origin, glm::vec3 direction) : origin_(origin), direction_(direction) {}
+        Ray (glm::vec3 origin, glm::vec3 direction) : origin_(origin), direction_(glm::normalize(direction - origin)) {}
 
         glm::vec3 getOrigin() const
         {

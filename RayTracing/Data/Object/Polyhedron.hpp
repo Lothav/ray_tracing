@@ -33,7 +33,7 @@ namespace RayTracing
             std::vector<glm::vec3> intersections = {};
 
             auto ray_origin     = ray->getOrigin();
-            auto ray_direction  = glm::normalize(ray->getDirection() - ray->getOrigin());
+            auto ray_direction  = ray->getDirection();
 
             for (auto& plane : planes_) {
 

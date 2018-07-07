@@ -30,7 +30,7 @@ namespace RayTracing
             std::vector<glm::vec3> intersections = {};
 
             glm::vec3 oc = ray->getOrigin() - center_;
-            auto ray_direction = glm::normalize(ray->getDirection() - ray->getOrigin());
+            auto ray_direction = ray->getDirection();
 
             auto a = glm::dot(ray_direction, ray_direction);
             auto b = 2.0f * glm::dot(oc, ray_direction);
