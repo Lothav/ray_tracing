@@ -66,7 +66,9 @@ namespace RayTracing
                     Object*   near_object = nullptr;
 
                     glm::vec3 pigment(.0f);
-                    if (getIntersection(ray, near_object, min_intersection)) {
+                    if (getIntersection(ray, near_object, min_intersection, nullptr)) {
+                        uint lights_intersection = 0;
+                        auto total_lights = lights.size()-1;
                         for (int k = 1; k < lights.size(); ++k) {
                             auto light = lights[k];
                             auto* l_ray = new Ray(min_intersection, light->getPos() - min_intersection);
@@ -74,12 +76,16 @@ namespace RayTracing
                             glm::vec3 l_min_intersection = {};
                             Object*   l_near_object = nullptr;
 
-                            auto found = getIntersection(l_ray, l_near_object, l_min_intersection);
+                            auto found = getIntersection(l_ray, l_near_object, l_min_intersection, near_object);
                             if (!found || glm::length(light->getPos() - min_intersection) < glm::length(l_min_intersection - min_intersection)) {
-                                pigment = pigments[near_object->getPigmentIndex()]->getColor(min_intersection);
+                                lights_intersection++;
                             }
                             delete l_ray;
                         }
+
+                        auto attenuation = (static_cast<float>(lights_intersection)/ static_cast<float>(total_lights));
+                        pigment = pigments[near_object->getPigmentIndex()]->getColor(min_intersection) * attenuation;
+
                     }
                     delete ray;
 
@@ -90,13 +96,16 @@ namespace RayTracing
 
     private:
 
-        bool getIntersection(Ray* ray, Object*& near_object, glm::vec3& min_intersection)
+        bool getIntersection(Ray* ray, Object*& near_object, glm::vec3& min_intersection, Object* from_object)
         {
             auto* camera        = data_->getCamera();
             float min_distance  = MAXFLOAT;
             bool  found         = false;
 
             for (auto& object : data_->getObjects()) {
+                if(from_object == object) {
+                    continue;
+                }
 
                 auto intersections = object->getIntersections(ray);
                 if (intersections.empty()) continue;
