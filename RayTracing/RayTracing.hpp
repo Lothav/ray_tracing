@@ -67,17 +67,21 @@ namespace RayTracing
 
                     glm::vec3 pigment(.0f);
                     if (getIntersection(ray, near_object, min_intersection, nullptr)) {
-                        uint lights_intersection = 0;
-                        auto total_lights = lights.size()-1;
+                        uint lights_intersection = 1;
+                        auto total_lights = lights.size();
                         for (int k = 1; k < lights.size(); ++k) {
-                            auto light = lights[k];
-                            auto* l_ray = new Ray(min_intersection, light->getPos() - min_intersection);
+
+                            auto* l_ray = new Ray(min_intersection, lights[k]->getPos() - min_intersection);
 
                             glm::vec3 l_min_intersection = {};
                             Object*   l_near_object = nullptr;
 
-                            auto found = getIntersection(l_ray, l_near_object, l_min_intersection, near_object);
-                            if (!found || glm::length(light->getPos() - min_intersection) < glm::length(l_min_intersection - min_intersection)) {
+                            auto found_i = getIntersection(l_ray, l_near_object, l_min_intersection, near_object);
+
+                            auto dist_l  = glm::length(lights[k]->getPos() - min_intersection);
+                            auto dist_i  = glm::length(l_min_intersection - min_intersection);
+
+                            if (!found_i || dist_l < dist_i) {
                                 lights_intersection++;
                             }
                             delete l_ray;

@@ -29,12 +29,12 @@ namespace RayTracing
         glm::vec3 getColor(glm::vec3 intersection) override
         {
             auto color = intersection.x < 0.f ? color_a_ : color_b_;
-
-            if (static_cast<int>(intersection.x / size_) % 2 == 0) {
+            if (static_cast<int>(abs(intersection.x) / size_) % 2 == 0) {
                 color = intersection.x < 0.f ? color_b_ : color_a_;
             }
 
-            if (static_cast<int>(intersection.z / size_) % 2 == 0) {
+            color = intersection.z < 0.f && color == color_a_ ? color_b_ : color_a_;
+            if (static_cast<int>(abs(intersection.z) / size_) % 2 == 0) {
                 color = color == color_a_ ? color_b_ : color_a_;
             }
 
