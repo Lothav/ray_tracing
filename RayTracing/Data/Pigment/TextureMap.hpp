@@ -12,6 +12,7 @@
 #include <utility>
 #include <fstream>
 #include <iostream>
+#include <glm/geometric.hpp>
 
 namespace RayTracing
 {
@@ -41,6 +42,20 @@ namespace RayTracing
 
             this->data_ = Util::ReadStream(fs);
             fs.close();
+        }
+
+        glm::vec3 getColor(glm::vec3 intersection) override
+        {
+            //auto s = glm::dot(map_vec_1_, glm::vec4(intersection, 1.f));
+            //auto t = glm::dot(map_vec_2_, glm::vec4(intersection, 1.f));
+
+            //auto index = (467/2) + static_cast<int>(s * 467);
+
+            auto r = 0.f; //std::stoi(data_[index])/255.99f;
+            auto g = 0.f; //std::stoi(data_[index+1])/255.99f;
+            auto b = 0.f; //std::stoi(data_[index+2])/255.99f;
+
+            return glm::vec3(r, g, b);
         }
     };
 }
