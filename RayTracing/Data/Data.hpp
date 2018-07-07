@@ -52,6 +52,11 @@ namespace RayTracing
             return pigments_;
         }
 
+        std::vector<Light*> getLights() const
+        {
+            return lights_;
+        }
+
         std::vector<Object *> getObjects() const
         {
             return objects_;

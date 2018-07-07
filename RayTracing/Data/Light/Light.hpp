@@ -21,8 +21,13 @@ namespace RayTracing
 
     public:
 
-        Light(glm::vec3 pos, glm::vec3 color, glm::vec3 mitigation) : pos_(pos), color_(color), mitigation_(mitigation)
-        {}
+        Light(glm::vec3 pos, glm::vec3 color, glm::vec3 mitigation) : pos_(pos), color_(color), mitigation_(mitigation) {}
+
+        glm::vec3 getPos()
+        {
+            return pos_;
+        }
+
 
     };
 
