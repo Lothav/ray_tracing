@@ -53,7 +53,7 @@ namespace RayTracing
             fs << "P3\n" << color_map[0].size() << " " << color_map.size() << "\n255\n";
 
             for (int j = static_cast<int>(color_map[0].size()-1); j >= 0; j--) {
-                for (int i = 0; i < color_map.size(); i++) {
+                for (int i = static_cast<int>(color_map.size()-1); i >= 0; i--) {
                      auto ir = int(255.99 * color_map[i][j].r);
                      auto ig = int(255.99 * color_map[i][j].g);
                      auto ib = int(255.99 * color_map[i][j].b);
