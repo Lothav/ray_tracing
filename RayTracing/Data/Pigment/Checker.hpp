@@ -33,7 +33,6 @@ namespace RayTracing
                 color = intersection.x < 0.f ? color_b_ : color_a_;
             }
 
-            color = intersection.z < 0.f && color == color_a_ ? color_b_ : color_a_;
             if (static_cast<int>(abs(intersection.z) / size_) % 2 == 0) {
                 color = color == color_a_ ? color_b_ : color_a_;
             }

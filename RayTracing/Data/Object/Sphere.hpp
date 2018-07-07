@@ -40,16 +40,33 @@ namespace RayTracing
 
             if (d >= 0) {
                 auto x1 = (-b + glm::sqrt(d)) / (2*a);
-                intersections.push_back(ray->getOrigin() + (ray_direction*x1));
+                auto intersection = ray->getOrigin() + (ray_direction * x1);
+                if (checkValidIntersection(ray, intersection)) {
+                    intersections.push_back(intersection);
+                }
             }
 
             if (d > 0) {
                 auto x1 = (-b - glm::sqrt(d)) / (2*a);
-                intersections.push_back(ray->getOrigin() + (ray_direction*x1));
+                auto intersection = ray->getOrigin() + (ray_direction*x1);
+                if (checkValidIntersection(ray, intersection)) {
+                    intersections.push_back(intersection);
+                }
             }
 
             return intersections;
         };
+
+    private:
+
+        bool checkValidIntersection(Ray* ray, glm::vec3 intersection)
+        {
+            auto origin_dist = glm::length(ray->getOrigin() - intersection);
+            auto inters_dist = glm::length((ray->getOrigin()+ray->getDirection()) - intersection);
+
+            return origin_dist > inters_dist;
+        }
+
     };
 }
 
