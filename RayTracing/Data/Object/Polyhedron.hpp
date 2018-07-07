@@ -8,6 +8,7 @@
 #include <glm/vec4.hpp>
 #include <vector>
 #include <glm/geometric.hpp>
+#include <array>
 #include "Object.hpp"
 
 namespace RayTracing
@@ -28,6 +29,13 @@ namespace RayTracing
             this->planes_.push_back(plane);
         }
 
+
+        /**
+         * Polyhedron intersection method described in
+         * Book:    Graphic Gems II
+         * Section: FAST RAY-CONVEX POLYHEDRON INTERSECTION
+         * Page:    247
+         * */
         std::vector<glm::vec3> getIntersections(Ray* ray) override
         {
             std::vector<glm::vec3> intersections = {};
@@ -35,18 +43,54 @@ namespace RayTracing
             auto ray_origin     = ray->getOrigin();
             auto ray_direction  = ray->getDirection();
 
-            for (auto& plane : planes_) {
+            float t_near = -MAXFLOAT;
+            float t_far  = MAXFLOAT;
 
-                auto dot_plane_vec = static_cast<float>(glm::dot(ray_direction, glm::vec3(plane)));
+            std::array<int, 2> indexes = {-1, -1};
+
+            for (int j = 0; j < planes_.size(); ++j) {
+                auto plane = planes_[j];
+
+                auto U_n = glm::dot(ray_origin, glm::vec3(plane)) + plane.w;
+                auto U_d = glm::dot(ray_direction, glm::vec3(plane));
 
                 // check parallel
-                if (dot_plane_vec == 0.f) {
+                if (U_d == 0.f && U_n > 0.f) {
                     continue;
                 }
 
-                auto s1 = -(plane.x * ray_origin.x + plane.y * ray_origin.y + plane.z * ray_origin.z + plane.w) / dot_plane_vec;
+                auto t = -U_n/U_d;
+                if (t < 0.f) {
+                    continue;
+                }
 
-                if (s1 >= 0.f) {
+                if(U_d > 0.f){
+                    // Back-face plane
+                    if (t < t_far) {
+                        t_far = t;
+                        indexes[0] = j;
+                    }
+                } else {
+                    // Front-face plane
+                    if (t > t_near) {
+                        t_near = t;
+                        indexes[1] = j;
+                    }
+                }
+
+                if (t_near > t_far) {
+                    return {};
+                }
+
+            }
+
+            if (indexes[0] != -1 && indexes[1] != -1) {
+                for (int index : indexes) {
+                    auto plane = planes_[index];
+
+                    auto U_d = static_cast<float>(glm::dot(ray_direction, glm::vec3(plane)));
+                    auto s1 = -(plane.x * ray_origin.x + plane.y * ray_origin.y + plane.z * ray_origin.z + plane.w) / U_d;
+
                     intersections.push_back(ray->getOrigin() + (ray_direction * s1));
                 }
             }
