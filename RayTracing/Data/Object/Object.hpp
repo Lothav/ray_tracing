@@ -13,12 +13,12 @@ namespace RayTracing
     class Object
     {
 
-        int pigment_index_;
-        int finish_index_;
+        uint pigment_index_;
+        uint finish_index_;
 
     protected:
 
-        Object(int pigment_index, int finish_index) : pigment_index_(pigment_index), finish_index_(finish_index) {}
+        Object(uint pigment_index, uint finish_index) : pigment_index_(pigment_index), finish_index_(finish_index) {}
 
     public:
 
@@ -27,11 +27,20 @@ namespace RayTracing
             return {};
         };
 
-        int getPigmentIndex() const
+        virtual glm::vec3 getNormal(glm::vec3 point)
+        {
+            return {};
+        }
+
+        uint getPigmentIndex() const
         {
             return pigment_index_;
         }
 
+        uint getFinishIndex() const
+        {
+            return finish_index_;
+        }
     };
 }
 

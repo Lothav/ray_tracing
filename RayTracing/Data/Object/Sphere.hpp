@@ -22,8 +22,13 @@ namespace RayTracing
 
     public:
 
-        Sphere(int pigment_index, int finish_index, glm::vec3 center, float radius)
+        Sphere(uint pigment_index, uint finish_index, glm::vec3 center, float radius)
                 : Object(pigment_index, finish_index), center_(center), radius_(radius) {}
+
+        glm::vec3 getNormal(glm::vec3 point) override
+        {
+            return glm::normalize(point - this->center_);
+        }
 
         std::vector<glm::vec3> getIntersections(Ray* ray) override
         {

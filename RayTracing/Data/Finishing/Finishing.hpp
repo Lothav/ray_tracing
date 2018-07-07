@@ -20,7 +20,18 @@ namespace RayTracing
 
     public:
 
-        Finishing(glm::vec4 light_coefficients_, glm::vec3 model_coefficients_) : light_coefficients_(), model_coefficients_() {}
+        Finishing(glm::vec4 light_coefficients_, glm::vec3 model_coefficients_)
+                : light_coefficients_(light_coefficients_), model_coefficients_(model_coefficients_) {}
+
+        glm::vec4 getLightCoefficients() const
+        {
+           return light_coefficients_;
+        }
+
+        glm::vec3 getModelCoefficients() const
+        {
+            return model_coefficients_;
+        }
 
     };
 }

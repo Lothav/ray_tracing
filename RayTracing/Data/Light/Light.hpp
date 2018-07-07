@@ -23,11 +23,20 @@ namespace RayTracing
 
         Light(glm::vec3 pos, glm::vec3 color, glm::vec3 mitigation) : pos_(pos), color_(color), mitigation_(mitigation) {}
 
-        glm::vec3 getPos()
+        glm::vec3 getPos() const
         {
             return pos_;
         }
 
+        glm::vec3 getColor() const
+        {
+            return color_;
+        }
+
+        glm::vec3 getMitigation() const
+        {
+            return mitigation_;
+        }
 
     };
 

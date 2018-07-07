@@ -62,6 +62,11 @@ namespace RayTracing
             return objects_;
         }
 
+        std::vector<Finishing *> getFinishes() const
+        {
+            return finishes_;
+        }
+
     };
 }
 

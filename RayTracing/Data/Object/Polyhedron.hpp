@@ -22,13 +22,22 @@ namespace RayTracing
 
     public:
 
-        Polyhedron(int pigment_index, int finish_index) : Object(pigment_index, finish_index), planes_({}) {}
+        Polyhedron(uint pigment_index, uint finish_index) : Object(pigment_index, finish_index), planes_({}) {}
 
         void addPlane(glm::vec4 plane)
         {
             this->planes_.push_back(plane);
         }
 
+        glm::vec3 getNormal(glm::vec3 point) override
+        {
+            for (auto plane : planes_) {
+                if (plane.x * point.x + plane.y * point.y + plane.z * point.z == -plane.w) {
+                    return glm::normalize(glm::vec3(plane));
+                }
+            }
+            return {};
+        }
 
         /**
          * Polyhedron intersection method described in

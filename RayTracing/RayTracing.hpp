@@ -5,7 +5,7 @@
 #ifndef RAY_TRACING_RAYTRACING_HPP
 #define RAY_TRACING_RAYTRACING_HPP
 
-
+#include <algorithm>    // std::max
 #include "Data/Data.hpp"
 
 namespace RayTracing
@@ -33,6 +33,7 @@ namespace RayTracing
             auto* camera  = data_->getCamera();
             auto lights   = data_->getLights();
             auto pigments = data_->getPigment();
+            auto finishes = data_->getFinishes();
 
             auto camera_eye              = camera->getEye();
             auto camera_center           = camera->getCenter();
@@ -60,38 +61,55 @@ namespace RayTracing
                     auto direction = lower_left_corner + u*glm::vec3(size, 0, 0) + v*glm::vec3(0, size, 0);
                     direction.z = -((camera_center.x * direction.x) + (camera_center.y * direction.y) + projection_plane_d) / (camera_center.z);
 
-                    auto* ray = new Ray(camera->getEye(), direction);
+                    auto* d_ray = new Ray(camera->getEye(), direction);
 
                     glm::vec3 min_intersection = {};
                     Object*   near_object = nullptr;
 
                     glm::vec3 pigment(.0f);
-                    if (getIntersection(ray, near_object, min_intersection, nullptr)) {
-                        uint lights_intersection = 1;
-                        auto total_lights = lights.size();
+                    if (getIntersection(d_ray, near_object, min_intersection, nullptr)) {
+
+                        auto ambient_light = lights[0];
+
+                        auto finish  = finishes[near_object->getFinishIndex()];
+                        auto light_c = finish->getLightCoefficients();
+
+                        pigment = pigments[near_object->getPigmentIndex()]->getColor(min_intersection) ;
+
+                        glm::vec3 ambient = ambient_light->getColor() * light_c.x;
+                        glm::vec3 diffuse(0.f);
+                        float specular = 0.f;
+
                         for (int k = 1; k < lights.size(); ++k) {
 
-                            auto* l_ray = new Ray(min_intersection, lights[k]->getPos() - min_intersection);
+                            auto l_pos = lights[k]->getPos();
+                            auto l_color = lights[k]->getColor();
+                            auto* l_ray = new Ray(min_intersection, l_pos - min_intersection);
 
                             glm::vec3 l_min_intersection = {};
                             Object*   l_near_object = nullptr;
 
                             auto found_i = getIntersection(l_ray, l_near_object, l_min_intersection, near_object);
 
-                            auto dist_l  = glm::length(lights[k]->getPos() - min_intersection);
-                            auto dist_i  = glm::length(l_min_intersection - min_intersection);
+                            auto dist_l  = glm::length(l_pos - min_intersection);
+                            auto dist_i  = glm::length(l_min_intersection  - min_intersection);
 
                             if (!found_i || dist_l < dist_i) {
-                                lights_intersection++;
+
+                                auto N = near_object->getNormal(min_intersection);
+                                auto L = glm::normalize(l_pos - min_intersection);
+                                auto V = glm::normalize(camera->getEye() - min_intersection);
+                                auto R = glm::reflect(-L, N);
+
+                                diffuse  += light_c.y * std::max(glm::dot(N, L), 0.0f) * glm::vec3(1.0f);
+                                specular += light_c.z * pow(std::max(glm::dot(R, V), 0.0f), light_c.w) * 1.0f; // 1.0f = alpha
                             }
                             delete l_ray;
                         }
 
-                        auto attenuation = (static_cast<float>(lights_intersection)/ static_cast<float>(total_lights));
-                        pigment = pigments[near_object->getPigmentIndex()]->getColor(min_intersection) * attenuation;
-
+                        pigment = ambient + diffuse*pigment + specular;
                     }
-                    delete ray;
+                    delete d_ray;
 
                     this->color_map_[this->color_map_.size()-1].push_back(pigment);
                 }
