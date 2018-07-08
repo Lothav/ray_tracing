@@ -15,10 +15,10 @@ int main(int argc, char* argv[])
         return EXIT_FAILURE;
     }
 
-    auto* data = new RayTracing::Data();
+    auto data = std::make_shared<RayTracing::Data>();
     data->loadFromfile(argv[1]);
 
-    auto* ray_tracing = new RayTracing::RayTracing(data);
+    auto ray_tracing = std::make_unique<RayTracing::RayTracing>(data.get());
     ray_tracing->fillColorMap();
 
     auto file = std::make_unique<RayTracing::File>(argv[2]);

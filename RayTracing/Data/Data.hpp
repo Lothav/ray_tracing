@@ -20,7 +20,7 @@ namespace RayTracing
 
     private:
 
-        Camera*                         camera_;
+        Camera*                         camera_{};
         std::vector<Light *>            lights_;
         std::vector<Pigment *>          pigments_;
         std::vector<Finishing *>        finishes_;
@@ -28,7 +28,7 @@ namespace RayTracing
 
     public:
 
-        Data() {}
+        Data() = default;
 
         void loadFromfile(const std::string& path)
         {

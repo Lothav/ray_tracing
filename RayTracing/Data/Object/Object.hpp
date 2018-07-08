@@ -7,6 +7,7 @@
 
 #include "../../Ray.hpp"
 #include <vector>
+#include <memory>
 
 namespace RayTracing
 {
@@ -22,7 +23,7 @@ namespace RayTracing
 
     public:
 
-        virtual std::vector<glm::vec3> getIntersections(Ray* ray)
+        virtual std::vector<glm::vec3> getIntersections(const std::shared_ptr<Ray>& ray)
         {
             return {};
         };

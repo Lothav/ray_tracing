@@ -30,7 +30,7 @@ namespace RayTracing
             return glm::normalize(point - this->center_);
         }
 
-        std::vector<glm::vec3> getIntersections(Ray* ray) override
+        std::vector<glm::vec3> getIntersections(const std::shared_ptr<Ray>& ray) override
         {
             std::vector<glm::vec3> intersections = {};
 
@@ -64,7 +64,7 @@ namespace RayTracing
 
     private:
 
-        bool checkValidIntersection(Ray* ray, glm::vec3 intersection)
+        bool checkValidIntersection(const std::shared_ptr<Ray>& ray, glm::vec3 intersection)
         {
             auto origin_dist = glm::length(ray->getOrigin() - intersection);
             auto inters_dist = glm::length((ray->getOrigin()+ray->getDirection()) - intersection);

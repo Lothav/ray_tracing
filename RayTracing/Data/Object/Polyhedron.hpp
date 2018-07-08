@@ -45,7 +45,7 @@ namespace RayTracing
          * Section: FAST RAY-CONVEX POLYHEDRON INTERSECTION
          * Page:    247
          * */
-        std::vector<glm::vec3> getIntersections(Ray* ray) override
+        std::vector<glm::vec3> getIntersections(const std::shared_ptr<Ray>& ray) override
         {
             std::vector<glm::vec3> intersections = {};
 

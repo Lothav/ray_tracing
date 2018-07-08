@@ -60,7 +60,7 @@ namespace RayTracing
                     auto direction = lower_left_corner + u*glm::vec3(size, 0, 0) + v*glm::vec3(0, size, 0);
                     direction.z = -((camera_center.x * direction.x) + (camera_center.y * direction.y) + projection_plane_d) / (camera_center.z);
 
-                    auto* d_ray = new Ray(camera->getEye(), direction);
+                    auto d_ray = std::make_shared<Ray>(camera->getEye(), direction);
                     auto final_color = getFinalColor(d_ray);
 
                     this->color_map_[this->color_map_.size()-1].push_back(final_color);
@@ -70,7 +70,7 @@ namespace RayTracing
 
     private:
 
-        glm::vec3 getFinalColor(Ray* d_ray)
+        glm::vec3 getFinalColor(const std::shared_ptr<Ray>& d_ray)
         {
             auto* camera  = data_->getCamera();
             auto lights   = data_->getLights();
@@ -101,7 +101,7 @@ namespace RayTracing
 
                     auto l_pos   = lights[k]->getPos();
                     auto l_color = lights[k]->getColor();
-                    auto* l_ray  = new Ray(min_intersection, l_pos - min_intersection);
+                    auto l_ray   = std::make_shared<Ray>(min_intersection, l_pos - min_intersection);
 
                     glm::vec3 l_min_intersection = {};
                     Object*   l_near_object = nullptr;
@@ -119,23 +119,22 @@ namespace RayTracing
                         diffuse  += light_c.y * l_color * std::max(glm::dot(N, L), 0.0f) * glm::vec3(1.0f);
                         specular += light_c.z * pow(std::max(glm::dot(R, V), 0.0f), light_c.w) * 1.0f; // 1.0f = alpha
                     }
-
-                    delete l_ray;
                 }
 
                 final_color = pigment*(ambient + diffuse) + specular;
 
                 if (model_c.x > 0.f) {
                     auto R = glm::reflect(-V, N);
-                    final_color += model_c.x * getFinalColor(new Ray(min_intersection, min_intersection+R));
+
+                    auto r_ray = std::make_shared<Ray>(min_intersection, min_intersection+R);
+                    final_color += model_c.x * getFinalColor(r_ray);
                 }
             }
-            delete d_ray;
 
             return final_color;
         }
 
-        bool getIntersection(Ray* ray, Object*& near_object, glm::vec3& min_intersection, Object* from_object)
+        bool getIntersection(const std::shared_ptr<Ray>& ray, Object*& near_object, glm::vec3& min_intersection, Object* from_object)
         {
             auto* camera        = data_->getCamera();
             float min_distance  = MAXFLOAT;
@@ -165,7 +164,6 @@ namespace RayTracing
 
             return found;
         }
-
     };
 
 }
