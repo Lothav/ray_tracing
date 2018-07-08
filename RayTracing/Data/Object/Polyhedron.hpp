@@ -9,7 +9,10 @@
 #include <vector>
 #include <glm/geometric.hpp>
 #include <array>
+#include <iostream>
 #include "Object.hpp"
+
+#define EPSILON 0.001
 
 namespace RayTracing
 {
@@ -32,10 +35,12 @@ namespace RayTracing
         glm::vec3 getNormal(glm::vec3 point) override
         {
             for (auto plane : planes_) {
-                if (plane.x * point.x + plane.y * point.y + plane.z * point.z == -plane.w) {
+                float d = plane.x * point.x + plane.y * point.y + plane.z * point.z;
+                if (std::fabs(plane.w + d) < EPSILON) {
                     return glm::normalize(glm::vec3(plane));
                 }
             }
+            std::cerr << "Cant find Polyhedron normal!" << std::endl;
             return {};
         }
 

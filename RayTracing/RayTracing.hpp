@@ -8,6 +8,8 @@
 #include <algorithm>    // std::max
 #include "Data/Data.hpp"
 
+#define MAX_ITERATIONS 5
+
 namespace RayTracing
 {
 
@@ -61,17 +63,22 @@ namespace RayTracing
                     direction.z = -((camera_center.x * direction.x) + (camera_center.y * direction.y) + projection_plane_d) / (camera_center.z);
 
                     auto d_ray = std::make_shared<Ray>(camera->getEye(), direction);
-                    auto final_color = getFinalColor(d_ray);
+                    auto final_color = getFinalColor(d_ray, 0);
 
                     this->color_map_[this->color_map_.size()-1].push_back(final_color);
                 }
+
             }
         }
 
     private:
 
-        glm::vec3 getFinalColor(const std::shared_ptr<Ray>& d_ray)
+        glm::vec3 getFinalColor(const std::shared_ptr<Ray>& d_ray, uint iterations)
         {
+            if (iterations >= MAX_ITERATIONS) {
+                return glm::vec3(0.f, 0.f, 0.f);
+            }
+
             auto* camera  = data_->getCamera();
             auto lights   = data_->getLights();
             auto pigments = data_->getPigment();
@@ -80,7 +87,7 @@ namespace RayTracing
             glm::vec3 min_intersection = {};
             Object*   near_object = nullptr;
 
-            glm::vec3 final_color(.0f);
+            glm::vec3 final_color(.0f, 1.f, 0.f);
             if (getNearIntersection(d_ray, near_object, min_intersection, nullptr)) {
 
                 auto ambient_light = lights[0];
@@ -115,9 +122,9 @@ namespace RayTracing
                     if (!found_i || dist_l < dist_i) {
 
                         auto L = glm::normalize(l_pos - min_intersection);
-                        auto R = glm::reflect(-L, N);
+                        auto R = glm::normalize(glm::reflect(-L, N));
 
-                        diffuse  += light_c.y * l_color * std::max(glm::dot(N, L), 0.0f) * glm::vec3(1.0f);
+                        diffuse  += light_c.y * std::max(glm::dot(N, L), 0.0f) * glm::vec3(1.0f);
                         specular += light_c.z * pow(std::max(glm::dot(R, V), 0.0f), light_c.w) * 1.0f; // 1.0f = alpha
                     }
                 }
@@ -126,9 +133,8 @@ namespace RayTracing
 
                 if (model_c.x > 0.f) {
                     auto R = glm::reflect(-V, N);
-
                     auto r_ray = std::make_shared<Ray>(min_intersection, min_intersection+R);
-                    final_color += model_c.x * getFinalColor(r_ray);
+                    final_color += model_c.x * getFinalColor(r_ray, iterations+1);
                 }
             }
 
