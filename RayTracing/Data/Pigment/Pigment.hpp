@@ -28,6 +28,11 @@ namespace RayTracing
             return getColor();
         }
 
+        virtual glm::vec3 getColor(glm::vec3 intersection, double u, double v)
+        {
+            return getColor(intersection);
+        }
+
     };
 
 }

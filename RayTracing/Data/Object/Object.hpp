@@ -33,6 +33,8 @@ namespace RayTracing
             return {};
         }
 
+        virtual void getUV(const glm::vec3& point, double& u, double& v) {}
+
         uint getPigmentIndex() const
         {
             return pigment_index_;

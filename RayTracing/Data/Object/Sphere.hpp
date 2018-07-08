@@ -60,7 +60,17 @@ namespace RayTracing
             }
 
             return intersections;
-        };
+        }
+
+        void getUV(const glm::vec3& p, double& u, double& v) override
+        {
+            auto p_unit = glm::normalize(p);
+            auto phi    = atan2(p_unit.z, p_unit.x);
+            auto theta  = asin(p_unit.y);
+
+            u = 1 - (phi + M_PI) / (2*M_PI);
+            v = (theta + M_PI/2) / M_PI;
+        }
 
     private:
 
