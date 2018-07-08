@@ -52,8 +52,8 @@ namespace RayTracing
 
             fs << "P3\n" << color_map[0].size() << " " << color_map.size() << "\n255\n";
 
-            for (int j = static_cast<int>(color_map[0].size()-1); j >= 0; j--) {
-                for (int i = static_cast<int>(color_map.size()-1); i >= 0; i--) {
+            for (auto j = static_cast<int>(color_map[0].size()-1); j >= 0; j--) {
+                for (auto i = static_cast<int>(color_map.size()-1); i >= 0; i--) {
                      auto ir = int(255.99 * color_map[i][j].r);
                      auto ig = int(255.99 * color_map[i][j].g);
                      auto ib = int(255.99 * color_map[i][j].b);
@@ -210,8 +210,8 @@ namespace RayTracing
 
                     objects.push_back(
                         new RayTracing::Sphere(
-                            static_cast<int>(pigment_index),
-                            static_cast<int>(finish_index),
+                            static_cast<uint>(pigment_index),
+                            static_cast<uint>(finish_index),
                             {objects_data_indexes[2], objects_data_indexes[3], objects_data_indexes[4]},
                             objects_data_indexes[5]
                         )
@@ -222,7 +222,10 @@ namespace RayTracing
 
                 if (type == "polyhedron") {
 
-                    auto polyhedron = new RayTracing::Polyhedron(static_cast<int>(pigment_index), static_cast<int>(finish_index));
+                    auto polyhedron = new RayTracing::Polyhedron(
+                        static_cast<uint>(pigment_index),
+                        static_cast<uint>(finish_index)
+                    );
 
                     for (int i = 0; i < objects_data_indexes[2]; ++i) {
                         jump_index++;

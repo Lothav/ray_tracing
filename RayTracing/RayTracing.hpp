@@ -46,14 +46,16 @@ namespace RayTracing
                 camera_center.z - projection_plane_len
             );
 
+            const uint width = 800, height = 800;
+
             auto size = projection_plane_len * 2.f;
 
-            for (int i = 0; i < size; i++) {
+            for (uint i = 0; i < height; i++) {
                 this->color_map_.push_back({});
-                for (int j = 0; j < size; j++) {
+                for (uint j = 0; j < width; j++) {
 
-                    auto u = static_cast<float>(i) / size;
-                    auto v = static_cast<float>(j) / size;
+                    auto u = static_cast<float>(i) / static_cast<float>(height);
+                    auto v = static_cast<float>(j) / static_cast<float>(width);
 
                     auto direction = lower_left_corner + u*glm::vec3(size, 0, 0) + v*glm::vec3(0, size, 0);
                     direction.z = -((camera_center.x * direction.x) + (camera_center.y * direction.y) + projection_plane_d) / (camera_center.z);
