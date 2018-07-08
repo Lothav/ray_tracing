@@ -66,7 +66,7 @@ namespace RayTracing
                     glm::vec3 min_intersection = {};
                     Object*   near_object = nullptr;
 
-                    glm::vec3 pigment(.0f);
+                    glm::vec3 final_color(.0f);
                     if (getIntersection(d_ray, near_object, min_intersection, nullptr)) {
 
                         auto ambient_light = lights[0];
@@ -74,7 +74,7 @@ namespace RayTracing
                         auto finish  = finishes[near_object->getFinishIndex()];
                         auto light_c = finish->getLightCoefficients();
 
-                        pigment = pigments[near_object->getPigmentIndex()]->getColor(min_intersection) ;
+                        auto pigment = pigments[near_object->getPigmentIndex()]->getColor(min_intersection) ;
 
                         glm::vec3 ambient = ambient_light->getColor() * light_c.x;
                         glm::vec3 diffuse(0.f);
@@ -101,17 +101,17 @@ namespace RayTracing
                                 auto V = glm::normalize(camera->getEye() - min_intersection);
                                 auto R = glm::reflect(-L, N);
 
-                                diffuse  += light_c.y * std::max(glm::dot(N, L), 0.0f) * glm::vec3(1.0f);
+                                diffuse  += light_c.y * l_color * std::max(glm::dot(N, L), 0.0f) * glm::vec3(1.0f);
                                 specular += light_c.z * pow(std::max(glm::dot(R, V), 0.0f), light_c.w) * 1.0f; // 1.0f = alpha
                             }
                             delete l_ray;
                         }
 
-                        pigment = ambient + diffuse*pigment + specular;
+                        final_color = pigment*(ambient + diffuse) + specular;
                     }
                     delete d_ray;
 
-                    this->color_map_[this->color_map_.size()-1].push_back(pigment);
+                    this->color_map_[this->color_map_.size()-1].push_back(final_color);
                 }
             }
         }
