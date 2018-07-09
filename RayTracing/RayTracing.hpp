@@ -79,7 +79,6 @@ namespace RayTracing
                 return glm::vec3(0.f, 0.f, 0.f);
             }
 
-            auto* camera  = data_->getCamera();
             auto lights   = data_->getLights();
             auto pigments = data_->getPigment();
             auto finishes = data_->getFinishes();
@@ -87,7 +86,7 @@ namespace RayTracing
             glm::vec3 min_intersection = {};
             Object*   near_object = nullptr;
 
-            glm::vec3 final_color(.0f, 1.f, 0.f);
+            glm::vec3 final_color(.0f);
             if (getNearIntersection(d_ray, near_object, min_intersection, nullptr)) {
 
                 auto ambient_light = lights[0];
@@ -96,7 +95,7 @@ namespace RayTracing
                 auto light_c = finish->getLightCoefficients();
                 auto model_c = finish->getModelCoefficients();
                 auto N = near_object->getNormal(min_intersection);
-                auto V = glm::normalize(camera->getEye() - min_intersection);
+                auto V = glm::normalize(d_ray->getOrigin() - min_intersection);
 
                 double u = 0.0, v = 0.0;
                 near_object->getUV(min_intersection, u, v);
@@ -132,7 +131,7 @@ namespace RayTracing
                 final_color = pigment * (ambient + diffuse) + specular;
 
                 if (model_c.x > 0.f) {
-                    auto R = glm::reflect(-V, N);
+                    auto R = glm::normalize(glm::reflect(-V, N));
                     auto r_ray = std::make_shared<Ray>(min_intersection, min_intersection+R);
                     final_color += model_c.x * getFinalColor(r_ray, iterations+1);
                 }
@@ -143,7 +142,6 @@ namespace RayTracing
 
         bool getNearIntersection(const std::shared_ptr<Ray>& ray, Object*& near_object, glm::vec3& min_intersection, Object* from_object)
         {
-            auto* camera        = data_->getCamera();
             float min_distance  = MAXFLOAT;
             bool  found         = false;
 
@@ -158,7 +156,7 @@ namespace RayTracing
                 if (intersections.empty()) continue;
 
                 for (auto &intersection : intersections) {
-                    auto distance = static_cast<float>(glm::length(camera->getEye() - intersection));
+                    auto distance = static_cast<float>(glm::length(ray->getOrigin() - intersection));
                     if (distance < min_distance) {
 
                         near_object      = object;

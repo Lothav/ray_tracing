@@ -54,10 +54,23 @@ namespace RayTracing
 
             for (auto j = static_cast<int>(color_map[0].size()-1); j >= 0; j--) {
                 for (auto i = static_cast<int>(color_map.size()-1); i >= 0; i--) {
-                     auto ir = static_cast<int>(255.f * color_map[i][j].r);
-                     auto ig = static_cast<int>(255.f * color_map[i][j].g);
-                     auto ib = static_cast<int>(255.f * color_map[i][j].b);
-                     fs << ir << " " << ig << " " << ib << "\n";
+
+                    auto r = color_map[i][j].r;
+                    if (r < 0.f) r = 0.f;
+                    if (r > 1.f) r = 1.f;
+
+                    auto g = color_map[i][j].g;
+                    if (g < 0.f) g = 0.f;
+                    if (g > 1.f) g = 1.f;
+
+                    auto b = color_map[i][j].b;
+                    if (b < 0.f) b = 0.f;
+                    if (b > 1.f) b = 1.f;
+
+                    auto ir = static_cast<int>(255.f * r);
+                    auto ig = static_cast<int>(255.f * g);
+                    auto ib = static_cast<int>(255.f * b);
+                    fs << ir << " " << ig << " " << ib << "\n";
                 }
             }
 

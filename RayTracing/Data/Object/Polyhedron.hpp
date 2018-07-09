@@ -105,7 +105,7 @@ namespace RayTracing
                     auto U_d = static_cast<float>(glm::dot(ray_direction, glm::vec3(plane)));
                     auto s1 = -(plane.x * ray_origin.x + plane.y * ray_origin.y + plane.z * ray_origin.z + plane.w) / U_d;
 
-                    intersections.push_back(ray->getOrigin() + (ray_direction * s1));
+                    intersections.push_back(ray_origin + (ray_direction * s1));
                 }
             }
 
