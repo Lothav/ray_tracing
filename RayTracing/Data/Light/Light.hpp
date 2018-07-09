@@ -28,6 +28,34 @@ namespace RayTracing
             return pos_;
         }
 
+        glm::vec3 getPos(int index) const
+        {
+            float coefficient = 30.f;
+
+            switch (index % 8) {
+                case 0:
+
+                    return glm::vec3(pos_.x - coefficient, pos_.y, pos_.z);
+                case 1:
+                    return glm::vec3(pos_.x - coefficient, pos_.y + coefficient, pos_.z);
+                case 2:
+                    return glm::vec3(pos_.x, pos_.y + coefficient, pos_.z);
+                case 3:
+                    return glm::vec3(pos_.x + coefficient, pos_.y + coefficient, pos_.z);
+                case 4:
+                    return glm::vec3(pos_.x + coefficient, pos_.y, pos_.z);
+                case 5:
+                    return glm::vec3(pos_.x + coefficient, pos_.y - coefficient, pos_.z);
+                case 6:
+                    return glm::vec3(pos_.x, pos_.y - coefficient, pos_.z);
+                case 7:
+                    return glm::vec3(pos_.x - coefficient, pos_.y - coefficient, pos_.z);
+                default:
+                    return pos_;
+            }
+
+        }
+
         glm::vec3 getColor() const
         {
             return color_;

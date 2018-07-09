@@ -107,24 +107,28 @@ namespace RayTracing
 
                 for (int k = 1; k < lights.size(); ++k) {
 
-                    auto l_pos   = lights[k]->getPos();
                     auto l_color = lights[k]->getColor();
-                    auto l_ray   = std::make_shared<Ray>(min_intersection, l_pos - min_intersection);
 
-                    glm::vec3 l_min_intersection = {};
-                    Object*   l_near_object = nullptr;
+                    for (int i = 0; i < 8; ++i) {
 
-                    auto found_i = getNearIntersection(l_ray, l_near_object, l_min_intersection, near_object);
-                    auto dist_i  = glm::length(l_min_intersection - min_intersection);
-                    auto dist_l  = glm::length(l_pos - min_intersection);
+                        auto l_pos = lights[k]->getPos(i);
+                        auto l_ray = std::make_shared<Ray>(min_intersection, l_pos - min_intersection);
 
-                    if (!found_i || dist_l < dist_i) {
+                        glm::vec3 l_min_intersection = {};
+                        Object*   l_near_object = nullptr;
 
-                        auto L = glm::normalize(l_pos - min_intersection);
-                        auto R = glm::normalize(glm::reflect(-L, N));
+                        auto found_i = getNearIntersection(l_ray, l_near_object, l_min_intersection, near_object);
+                        auto dist_i  = glm::length(l_min_intersection - min_intersection);
+                        auto dist_l  = glm::length(l_pos - min_intersection);
 
-                        diffuse  += light_c.y * std::max(glm::dot(N, L), 0.0f) * glm::vec3(1.0f);
-                        specular += light_c.z * pow(std::max(glm::dot(R, V), 0.0f), light_c.w) * 1.0f; // 1.0f = alpha
+                        if (!found_i || dist_l < dist_i) {
+
+                            auto L = glm::normalize(l_pos - min_intersection);
+                            auto R = glm::normalize(glm::reflect(-L, N));
+
+                            diffuse  += light_c.y * 0.125f * std::max(glm::dot(N, L), 0.0f) * glm::vec3(1.0f);
+                            specular += light_c.z * pow(std::max(glm::dot(R, V), 0.0f), light_c.w) * 1.0f; // 1.0f = alpha
+                        }
                     }
                 }
 
